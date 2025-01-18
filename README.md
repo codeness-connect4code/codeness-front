@@ -38,7 +38,7 @@
 
 ### 🌱 개발 환경
 
-- **IDE** : IntelliJ
+- **IDE** : IntelliJ, VS Code
 - **JDK** : openjdk version '17.0.2'
 - **Framework** : springframework.boot version '3.4.0', Spring Data JPA
 - **Library** : Lombok, Bcrypt, Junit, QueryDSL
