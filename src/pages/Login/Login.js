@@ -39,7 +39,7 @@ const Login = () => {
         axios.defaults.headers.common["Authorization"] = tokenWithBearer;
 
         setMessage("로그인 성공!");
-        history.push("/");
+        history.push("/payment"); // payment 경로로 이동
       } else {
         setMessage("로그인 실패: 토큰을 받지 못했습니다.");
       }
