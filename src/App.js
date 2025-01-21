@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch} from "react-router-dom"; // Switch 추가
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"; // Switch 추가
 import HomePage from "./pages/Home/Home";
 import LoginPage from "./pages/Login/Login";
 import PaymentPage from "./pages/Payment/Payment";
