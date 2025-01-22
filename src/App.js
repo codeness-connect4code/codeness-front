@@ -10,6 +10,7 @@ import MyPage from "./pages/mypage/profile/MyPage";
 import UserUpdatePage from "./pages/mypage/profile/UserUpdate";
 import Header from "./components/header/Header";
 import PaymentPage from "./pages/payment/Payment";
+import WriteReview from "./pages/mypage/review/WriteReview";
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -35,7 +36,7 @@ function App() {
           <Route path="/community" component={CommunityPage} />
           <Route path="/news" component={NewsPage} />
           <Route path="/payment" component={PaymentPage} />
-
+          <Route path="/mypage/review" component={WriteReview} />
           {/* 로그인 필요한 페이지는 PrivateRoute로 보호 */}
           <PrivateRoute path="/mypage" component={MyPage} />
           <PrivateRoute path="/user/update" component={UserUpdatePage} />
