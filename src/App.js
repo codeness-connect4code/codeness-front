@@ -6,6 +6,8 @@ import PaymentPage from "./pages/payment/Payment";
 import SignUpPage from "./pages/auth/SignUp";
 import LogoutPage from "./pages/auth/Logout";
 import Header from "./components/header/Header"; // Header 컴포넌트 경로
+import MentoringSearchPage from "./pages/mentoring/MentoringSearch";
+
 
 //로그인 상태에서만 /payment 경로에 접근 가능하도록 보호- 추후 분리 고려해보기
 // const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -29,6 +31,7 @@ function App() {
         <Route path="/logout" component={LogoutPage} />
         <Route path="/payment" component={PaymentPage} />
         <Route path="/signup" component={SignUpPage} />
+        <Route path="/mentoring-search" component={MentoringSearchPage} />
       </Switch>
     </Router>
   );
