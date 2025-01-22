@@ -82,7 +82,7 @@ const SignUp = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/signup', formData);
+      await axios.post('http://localhost:8080/signup', formData);
       alert('회원가입이 완료되었습니다.');
       history.push('/login');
     } catch (error) {

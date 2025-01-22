@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import logo from '../../assets/icons/Codeness_logo.png';
+import logo from '../../assets/icons/Codeness_logo.png'
 import './Header.css';
 
 const Header = () => {
