@@ -11,7 +11,6 @@ import UserUpdatePage from "./pages/mypage/profile/UserUpdate";
 import Header from "./components/header/Header";
 import PaymentPage from "./pages/payment/Payment";
 import WriteReview from "./pages/mypage/review/WriteReview";
-import Header from "./components/header/Header"; // Header 컴포넌트 경로
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
