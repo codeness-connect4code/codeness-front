@@ -87,7 +87,21 @@ const Payment = () => {
       setSelectedScheduleId(scheduleId);
     } catch (error) {
       console.error("주문 생성 요청 중 오류:", error);
-      alert("주문 생성 중 문제가 발생했습니다.");
+      if (error.response?.status === 500) {
+        if (error.response.data?.message?.includes("Duplicate")) {
+          alert("이미 신청한 스케줄입니다.");
+        } else {
+          alert("주문 생성 중 서버 오류가 발생했습니다.");
+        }
+      } else {
+        alert(
+          "주문 생성 중 문제가 발생했습니다: " +
+            (error.response?.data?.message || error.message)
+        );
+      }
+      // 오류 발생 시 상태 초기화
+      setSelectedScheduleId(null);
+      setPaymentId(null);
     } finally {
       setIsLoading(false);
     }
@@ -189,18 +203,18 @@ const Payment = () => {
                 <div>
                   <button
                     onClick={() => handleApply(schedule.id)}
-                    disabled={isLoading || paymentId === schedule.id}
+                    disabled={isLoading || selectedScheduleId === schedule.id}
                   >
                     {isLoading && selectedScheduleId === schedule.id
                       ? "신청 중..."
                       : "신청"}
                   </button>
-                  {paymentId === schedule.id && (
+                  {selectedScheduleId === schedule.id && paymentId && (
                     <button onClick={handlePayment} disabled={isLoading}>
                       {isLoading ? "결제 중..." : "결제하기"}
                     </button>
                   )}
-                  {pgTid && (
+                  {pgTid && selectedScheduleId === schedule.id && (
                     <button onClick={handleRefund} disabled={isLoading}>
                       {isLoading ? "환불 중..." : "환불"}
                     </button>
@@ -213,6 +227,71 @@ const Payment = () => {
           <p>유효한 스케쥴이 없습니다.</p>
         )}
       </div>
+      <style jsx>{`
+        .container {
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+
+        h1 {
+          text-align: center;
+          color: #333;
+        }
+
+        .schedule-list {
+          background: white;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+          color: #666;
+          margin-bottom: 20px;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+        }
+
+        li {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 15px;
+          border-bottom: 1px solid #eee;
+          margin-bottom: 10px;
+        }
+
+        li:last-child {
+          border-bottom: none;
+        }
+
+        button {
+          padding: 8px 16px;
+          margin-left: 10px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        button:not(:disabled) {
+          background-color: #007bff;
+          color: white;
+        }
+
+        button:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+        }
+
+        button:not(:disabled):hover {
+          background-color: #0056b3;
+        }
+      `}</style>
     </div>
   );
 };
