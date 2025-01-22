@@ -61,7 +61,7 @@ const Payment = () => {
    useEffect(() => {
        const fetchSchedules = async () => {
            try {
-               const response = await axios.get('/mentoring/5/mentoring-schedule/empty-status');
+               const response = await axios.get('/mentoring/6/mentoring-schedule/empty-status');
                setSchedules(response.data.data);
            } catch (error) {
                console.error('스케줄 데이터 가져오기 오류:', error);
