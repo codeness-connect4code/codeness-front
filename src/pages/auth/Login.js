@@ -60,11 +60,16 @@ const Login = () => {
     }
   };
 
+  // 구글 로그인 핸들러
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+  };
+
   return (
-    <div>
+    <div className="login-container">
       <h2>로그인</h2>
-      <form onSubmit={handleLogin}>
-        <div>
+      <form onSubmit={handleLogin} className="login-form">
+        <div className="form-group">
           <label>아이디:</label>
           <input
             type="text"
@@ -73,7 +78,7 @@ const Login = () => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>비밀번호:</label>
           <input
             type="password"
@@ -82,9 +87,85 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit">로그인</button>
+        <button type="submit" className="login-button">
+          로그인
+        </button>
       </form>
-      {message && <p>{message}</p>}
+
+      {/* 구글 로그인 버튼 */}
+      <div className="social-login">
+        <button onClick={handleGoogleLogin} className="google-login-button">
+          Google로 로그인
+        </button>
+      </div>
+
+      {message && <p className="message">{message}</p>}
+
+      <style jsx>{`
+        .login-container {
+          max-width: 400px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+
+        .login-form {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+
+        input {
+          padding: 8px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+        }
+
+        .login-button {
+          padding: 10px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        .login-button:hover {
+          background-color: #0056b3;
+        }
+
+        .social-login {
+          margin-top: 20px;
+          text-align: center;
+        }
+
+        .google-login-button {
+          padding: 10px;
+          background-color: white;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto;
+        }
+
+        .google-login-button:hover {
+          background-color: #f5f5f5;
+        }
+
+        .message {
+          margin-top: 15px;
+          color: #dc3545;
+          text-align: center;
+        }
+      `}</style>
     </div>
   );
 };
