@@ -18,7 +18,7 @@ function WriteReview(){
     }
 
     //토큰 가져오기
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("jwtToken");
 
     //후기 작성 버튼 누르면 서버에 요청
     const handleSubmit = async (e) => {
@@ -33,7 +33,7 @@ function WriteReview(){
                   {
                     headers: {
                       "Content-Type": "application/json",
-                      'Authorization' : `Bearer ${token}`
+                      "Authorization": `Bearer ${token}`
                     },
                     withCredentials: true, // CORS 요청에 credential 포함
                   });
