@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"; // Switch 추가
+import HomePage from "./pages/Home/Home";
+import LoginPage from "./pages/Login/Login";
+import PaymentPage from "./pages/Payment/Payment";
+import Header from './components/Header/Header'; // Header 컴포넌트 경로
+
+
+//로그인 상태에서만 /payment 경로에 접근 가능하도록 보호- 추후 분리 고려해보기
+// const PrivateRoute = ({ component: Component, ...rest }) => {
+//   const isAuthenticated = !!localStorage.getItem("jwtToken"); // 로그인 여부 확인
+//   return (
+//     <Route
+//       {...rest}
+//       render={(props) =>
+//         isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
+//       }
+//     />
+//   );
+// };;
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/login" component={LoginPage} />
+        <Route path="/payment" component={PaymentPage} />
+      </Switch>
+    </Router>
   );
 }
 
