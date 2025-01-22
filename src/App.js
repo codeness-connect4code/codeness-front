@@ -16,7 +16,7 @@ import Header from "./components/header/Header"; // Header 컴포넌트 경로
 //       }
 //     />
 //   );
-// };;
+// };
 
 function App() {
   return (

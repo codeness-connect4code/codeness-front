@@ -3,13 +3,13 @@ import { useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const Payment = () => {
-    const [schedules, setSchedules] = useState([]);
+  const [schedules, setSchedules] = useState([]);
   const [selectedScheduleId, setSelectedScheduleId] = useState(null);
   const [paymentId, setPaymentId] = useState(null);
   const [pgTid, setPgTid] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
-const location = useLocation();
+  const location = useLocation();
 
   useEffect(() => {
     // URL에서 토큰 파라미터 확인 (소셜 로그인 리다이렉트)
@@ -33,17 +33,17 @@ const location = useLocation();
     axios.defaults.headers.common["Authorization"] = `Bearer ${savedToken}`;
 
     // Iamport SDK 로드
-        const script = document.createElement("script");
-        script.src = "https://cdn.iamport.kr/js/iamport.payment-1.2.0.js";
-        script.async = true;
-        script.onload = () => {
-                    if (window.IMP) {
-            window.IMP.init("imp46707766");
-            console.log("IMP 초기화 완료");
-                      }
-        };
-                document.head.appendChild(script);
-      
+    const script = document.createElement("script");
+    script.src = "https://cdn.iamport.kr/js/iamport.payment-1.2.0.js";
+    script.async = true;
+    script.onload = () => {
+      if (window.IMP) {
+        window.IMP.init("imp46707766");
+        console.log("IMP 초기화 완료");
+      }
+    };
+    document.head.appendChild(script);
+
     // 스케줄 데이터 가져오기
     const fetchSchedules = async () => {
       try {
@@ -57,7 +57,7 @@ const location = useLocation();
         if (error.response?.status === 401) {
           localStorage.removeItem("jwtToken");
           history.push("/login");
-      }
+        }
       }
     };
 
@@ -74,7 +74,7 @@ const location = useLocation();
   const handleApply = async (scheduleId) => {
     setIsLoading(true);
     try {
-      console.log("요청 준비:", {         scheduleId       });
+      console.log("요청 준비:", { scheduleId });
       const response = await axios.post("/mentoring/payments", {
         mentoringScheduleId: scheduleId,
         paymentCost: 1,
@@ -86,7 +86,7 @@ const location = useLocation();
       setPaymentId(response.data.data);
       setSelectedScheduleId(scheduleId);
     } catch (error) {
-      console.error(        "주문 생성 요청 중 오류:", error      );
+      console.error("주문 생성 요청 중 오류:", error);
       alert("주문 생성 중 문제가 발생했습니다.");
     } finally {
       setIsLoading(false);
@@ -111,7 +111,7 @@ const location = useLocation();
       merchant_uid: `order_${new Date().getTime()}`,
       name: `멘토링 스케줄 (${selectedScheduleId})`,
       amount: 1,
-buyer_email: "test@test.com",
+      buyer_email: "test@test.com",
       buyer_name: "구매자이름",
       buyer_tel: "010-1234-5678",
     };
@@ -134,12 +134,12 @@ buyer_email: "test@test.com",
           );
           alert(`결제 확인 완료: ${response.data.msg}`);
         } catch (error) {
-          console.error(            "결제 검증 요청 중 오류:", error          );
+          console.error("결제 검증 요청 중 오류:", error);
           alert("결제 검증 중 문제가 발생했습니다.");
         }
       } else {
         alert(`결제가 실패하였습니다. 오류: ${rsp.error_msg}`);
-try {
+        try {
           await axios.delete(`/mentoring/payments/${paymentId}`, {
             data: { impUid: rsp.imp_uid },
           });
@@ -163,11 +163,11 @@ try {
         pgTid,
       });
       alert(`환불 완료: ${response.data.msg}`);
-setPaymentId(null);
+      setPaymentId(null);
       setPgTid(null);
       setSelectedScheduleId(null);
     } catch (error) {
-      console.error(        "환불 요청 중 오류:", error      );
+      console.error("환불 요청 중 오류:", error);
       alert("환불 요청 중 문제가 발생했습니다.");
     } finally {
       setIsLoading(false);
@@ -187,7 +187,7 @@ setPaymentId(null);
                   스케쥴: {schedule.date} {schedule.time}
                 </span>
                 <div>
-                                    <button
+                  <button
                     onClick={() => handleApply(schedule.id)}
                     disabled={isLoading || paymentId === schedule.id}
                   >
@@ -195,11 +195,11 @@ setPaymentId(null);
                       ? "신청 중..."
                       : "신청"}
                   </button>
-{paymentId === schedule.id && (
-                  <button                     onClick={handlePayment}                     disabled={isLoading}                  >
-                    {isLoading                       ? "결제 중..."                       : "결제하기"}
-                  </button>
-)}
+                  {paymentId === schedule.id && (
+                    <button onClick={handlePayment} disabled={isLoading}>
+                      {isLoading ? "결제 중..." : "결제하기"}
+                    </button>
+                  )}
                   {pgTid && (
                     <button onClick={handleRefund} disabled={isLoading}>
                       {isLoading ? "환불 중..." : "환불"}
