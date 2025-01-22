@@ -29,17 +29,12 @@ const Login = () => {
       const token = response.headers["authorization"] || response.data.token;
 
       if (token) {
-        // Bearer 접두사가 없다면 추가
-        const tokenWithBearer = token.startsWith("Bearer ")
-          ? token
-          : `Bearer ${token}`;
-        localStorage.setItem("token", tokenWithBearer);
-
-        // axios 기본 헤더 설정 (이후 요청에 사용)
-        axios.defaults.headers.common["Authorization"] = tokenWithBearer;
-
+        // 토큰 저장 키를 'jwtToken'으로 통일
+        localStorage.setItem("jwtToken", token);
+        // Bearer 접두사 포함하여 axios 기본 헤더 설정
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         setMessage("로그인 성공!");
-        history.push("/payment"); // payment 경로로 이동
+        history.push("/payment");
       } else {
         setMessage("로그인 실패: 토큰을 받지 못했습니다.");
       }
