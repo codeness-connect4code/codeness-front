@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"; // Switch 추가
-import HomePage from "./pages/Home/Home";
-import LoginPage from "./pages/Login/Login";
-import PaymentPage from "./pages/Payment/Payment";
-import Header from './components/Header/Header'; // Header 컴포넌트 경로
+import HomePage from "./pages/home/Home";
+import LoginPage from "./pages/auth/Login";
+import PaymentPage from "./pages/payment/Payment";
+import Header from './components/header/Header'; // Header 컴포넌트 경로
 
 
 //로그인 상태에서만 /payment 경로에 접근 가능하도록 보호- 추후 분리 고려해보기
