@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import MyPage from './profile/MyPage';
 import UserSchedule from "./schedule/UserSchedule";
 import { useHistory } from 'react-router-dom';
-import {User} from "lucide-react";
-
 
  const MyPageHome = () => {
  const [activeTab, setActiveTab] = useState('profile');

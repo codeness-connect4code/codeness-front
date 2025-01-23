@@ -16,7 +16,6 @@ import WriteReviewPage from "./pages/mypage/review/WriteReview";
 import MainNewsPage from "./pages/news/ViewMainNews";
 import MentoringPostSearchPage from "./pages/mentoring/MentoringPostSearch";
 import MentoringPostFormPage from "./pages/mentoring/MentoringPostForm";
-//App.js
 import MyPageHome from "./pages/mypage/MyPageHome";
 import UserSchedulePage from "./pages/mypage/schedule/UserSchedule";
 
