@@ -16,8 +16,8 @@ import WriteReviewPage from "./pages/mypage/review/WriteReview";
 import MainNewsPage from "./pages/news/ViewMainNews";
 import MentoringPostSearchPage from "./pages/mentoring/MentoringPostSearch";
 import MentoringPostFormPage from "./pages/mentoring/MentoringPostForm";
-//App.js
 import MyPageHome from "./pages/mypage/MyPageHome";
+import UserSchedulePage from "./pages/mypage/schedule/UserSchedule";
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -54,6 +54,7 @@ function App() {
           <PrivateRoute path="/user/update" component={UserUpdatePage} />
           <PrivateRoute path="/user/mentor" component={MentorRequestPage} />
           <Route path="/payment" component={PaymentPage} />
+          <Route path="/schedule" component={UserSchedulePage} />
           <Route path="/mentoring-post-form" component={MentoringPostFormPage} />
         </Switch>
       </Router>
