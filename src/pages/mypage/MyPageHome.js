@@ -1,6 +1,7 @@
 // MyPageHome.js
 import React, { useState } from 'react';
 import MyPage from './profile/MyPage';
+import UserSchedule from "./schedule/UserSchedule";
 import { useHistory } from 'react-router-dom';
 
 
@@ -49,7 +50,7 @@ import { useHistory } from 'react-router-dom';
        {/* 각 탭에 해당하는 컴포넌트를 여기에 렌더링 */}   
        {activeTab === 'profile' && <MyPage />}
        {activeTab === 'schedule' && <div>채팅 목록 컨텐츠</div>}
-       {activeTab === 'mentoring' && <div>일정 목록 컨텐츠</div>}
+       {activeTab === 'mentoring' && <UserSchedule/>}
        {activeTab === 'records' && <div>일정 목록 컨텐츠</div>}
        {/* ... 다른 탭들의 컨텐츠 */}
      </div>

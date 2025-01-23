@@ -2,6 +2,13 @@
 
 #intellij
 .idea/
+.idea
+.idea/codeness-front.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+
 
 # dependencies
 /node_modules
