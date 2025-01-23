@@ -50,7 +50,7 @@ function App() {
           <Route path="/news" component={NewsPage} />
           <Route path="/mentoring" component={MentoringPostSearchPage} />
           <Route path="/mypage/profile" component={MyPageHome} />
-
+          
           {/* 로그인 필요한 페이지는 PrivateRoute로 보호 */}
           <PrivateRoute path="/mypage" component={MyPage} />
           <PrivateRoute path="/user/update" component={UserUpdatePage} />
