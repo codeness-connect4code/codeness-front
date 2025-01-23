@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import MyPage from './profile/MyPage';
 import UserSchedule from "./schedule/UserSchedule";
 import DeleteUser from "./delete-user/DeleteUser";
+import MentorRequestList from "./mentor-request/MentorRequestList";
 import { useHistory } from 'react-router-dom';
 
 
@@ -54,6 +55,7 @@ import { useHistory } from 'react-router-dom';
        {activeTab === 'mentoring' && <UserSchedule/>}
        {activeTab === 'records' && <div>일정 목록 컨텐츠</div>}
        {activeTab === 'withdraw' && <DeleteUser/>}
+       {activeTab === 'history' && <MentorRequestList/>}
        {/* ... 다른 탭들의 컨텐츠 */}
      </div>
    </div>
