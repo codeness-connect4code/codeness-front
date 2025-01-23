@@ -5,12 +5,15 @@ import HomePage from "./pages/home/Home";
 import LoginPage from "./pages/auth/Login";
 import SignUpPage from "./pages/auth/SignUp";
 import CommunityPage from "./pages/community/CommunityMain";
-import NewsPage from "./pages/news/NewsMain";
+import NewsPage from "./pages/news/ViewNews";
 import MyPage from "./pages/mypage/profile/MyPage";
 import UserUpdatePage from "./pages/mypage/profile/UserUpdate";
 import Header from "./components/header/Header";
 import PaymentPage from "./pages/payment/Payment";
 import MentorRequestPage from "./pages/mentor-request/MentorRequest";
+import ViewReviewPage from "./pages/mypage/review/ViewReview";
+import WriteReviewPage from "./pages/mypage/review/WriteReview";
+import MainNewsPage from "./pages/news/ViewMainNews";
 import MentoringSearchPage from "./pages/mentoring/MentoringPostSearch";
 import MentoringPostFormPage from "./pages/mentoring/MentoringPostForm";
 
@@ -37,6 +40,10 @@ function App() {
           <Route path="/login" component={LoginPage} />
           <Route path="/signup" component={SignUpPage} />
           <Route path="/community" component={CommunityPage} />
+          <Route path="/news" component={NewsPage} />
+          <Route path="/mypage/payments/review/:paymentHistoryId" component={ViewReviewPage} />
+          <Route path="/mypage/payments/review" component={WriteReviewPage} />
+          <Route path="/main/news" component={MainNewsPage} />  {/* TODO: 나중에 삭제할 요소 */}
           <Route path="/news" component={NewsPage} />
           <Route path="/mentoring" component={MentoringSearchPage} />
 
