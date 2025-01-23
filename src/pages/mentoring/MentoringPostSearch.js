@@ -23,6 +23,14 @@ const MentoringPostSearchPage = () => {
   const [error, setError] = useState(null);
 
   /**
+   * 멘토링 공고 상세 페이지로 이동
+   */
+  const handlePostItemClick = (mentoringPostId) => {
+    history.push(`/mentoring/${mentoringPostId}`);
+  };
+
+
+  /**
    * 멘토링 공고 작성 페이지로 이동
    */
   const handleMentoringPostForm = () => {
@@ -120,18 +128,18 @@ const MentoringPostSearchPage = () => {
           {error && <p className="error-message">{error}</p>}
 
           <div className="post-list">
-            {posts.length === 0 && !error ? (
-                <p>멘토링 공고가 없습니다.</p>
-            ) : (
-                posts.map((post) => (
-                    <div key={post.mentoringPostId} className="post-item">
-                      <h4>{post.title}</h4>
-                      <p>분야: {post.field}</p>
-                      <p>멘토: {post.userNickname}</p>
-                      <p>평점: {post.starRating.toFixed(1)}</p>
-                    </div>
-                ))
-            )}
+            {posts.map((post) => (
+                <div
+                    key={post.mentoringPostId}
+                    className="post-item"
+                    onClick={() => handlePostItemClick(post.mentoringPostId)}
+                >
+                  <h4>{post.title}</h4>
+                  <p>분야: {post.field}</p>
+                  <p>멘토: {post.userNickname}</p>
+                  <p>평점: {post.starRating.toFixed(1)}</p>
+                </div>
+            ))}
           </div>
 
           <Pagination

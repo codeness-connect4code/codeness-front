@@ -48,7 +48,7 @@ const Payment = () => {
     const fetchSchedules = async () => {
       try {
         const response = await axios.get(
-          "/mentoring/1/mentoring-schedule/empty-status"
+          "/mentoring/4/mentoring-schedule/empty-status"
         );
         console.log("스케줄 데이터:", response.data);
         setSchedules(response.data.data);

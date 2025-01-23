@@ -18,6 +18,7 @@ import MentoringPostSearchPage from "./pages/mentoring/MentoringPostSearch";
 import MentoringPostFormPage from "./pages/mentoring/MentoringPostForm";
 //App.js
 import MyPageHome from "./pages/mypage/MyPageHome";
+import MentoringPostDetailPage from "./pages/mentoring/MentoringPostDetail";
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -48,6 +49,7 @@ function App() {
           <Route path="/news" component={NewsPage} />
           <Route path="/mentoring" component={MentoringPostSearchPage} />
           <Route path="/mypage/profile" component={MyPageHome} />
+          <Route path="/mentoring/:mentoringPostId" component={MentoringPostDetailPage} />
 
           {/* 로그인 필요한 페이지는 PrivateRoute로 보호 */}
           <PrivateRoute path="/mypage" component={MyPage} />
