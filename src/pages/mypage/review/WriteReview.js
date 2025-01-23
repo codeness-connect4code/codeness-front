@@ -45,7 +45,7 @@ function WriteReview(){
     //거래내역에서 후기 작성 누르면 받아올 데이터
     const response = {
             data: {
-                profileUrl : "https://codeness.s3.ap-northeast-1.amazonaws.com/Profile/1-Profile.jpg",
+                profileUrl : "https://codeness.s3.ap-northeast-1.amazonaws.com/Profile/1-Profile.png",
                 mentorNick : "김멘토1",
                 mentoringPost : "[한달 안에 파이썬 부시기]",
                 mentoringPostId : 1,
