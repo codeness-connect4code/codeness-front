@@ -17,7 +17,7 @@ const Header = () => {
   };
 
   const goToMyPage = () => {
-    history.push('/mypage');
+    history.push('/mypage/profile');
   };
 
   const handleLogout = () => {
