@@ -1,11 +1,22 @@
-import React from "react";
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 function Home() {
+  const history = useHistory();
+
+  const handleMentorRequest = () => {
+    history.push('/user/mentor');
+  };
+
   return (
-    <div>
-      <h1>Welcome to the Home Page</h1>
-      <p>This is the home page of the application.</p>
-    </div>
+      <div>
+        <h1>Welcome to the Home Page</h1>
+        <div className="update-button-container">
+          <button className="mentor-request-button" onClick={handleMentorRequest}>
+            멘토 신청하러 가기
+          </button>
+        </div>
+      </div>
   );
 }
 
