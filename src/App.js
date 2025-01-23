@@ -14,7 +14,7 @@ import MentorRequestPage from "./pages/mentor-request/MentorRequest";
 import ViewReviewPage from "./pages/mypage/review/ViewReview";
 import WriteReviewPage from "./pages/mypage/review/WriteReview";
 import MainNewsPage from "./pages/news/ViewMainNews";
-import MentoringSearchPage from "./pages/mentoring/MentoringPostSearch";
+import MentoringPostSearchPage from "./pages/mentoring/MentoringPostSearch";
 import MentoringPostFormPage from "./pages/mentoring/MentoringPostForm";
 
 
@@ -45,7 +45,7 @@ function App() {
           <Route path="/mypage/payments/review" component={WriteReviewPage} />
           <Route path="/main/news" component={MainNewsPage} />  {/* TODO: 나중에 삭제할 요소 */}
           <Route path="/news" component={NewsPage} />
-          <Route path="/mentoring" component={MentoringSearchPage} />
+          <Route path="/mentoring" component={MentoringPostSearchPage} />
 
           {/* 로그인 필요한 페이지는 PrivateRoute로 보호 */}
           <PrivateRoute path="/mypage" component={MyPage} />

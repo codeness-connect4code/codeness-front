@@ -1,65 +1,232 @@
-/* 전체 컨테이너 */
-.post-list {
+/* MentoringPostSearch.css */
+
+/* 기본 페이지 레이아웃 */
+.mentoring-page {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f9f9f9;
   display: flex;
-  flex-wrap: wrap; /* 줄바꿈 허용 */
-  gap: 20px; /* 카드 간 간격 */
-  justify-content: center; /* 카드 중앙 정렬 */
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 검색 컨테이너 스타일 */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* 드롭다운 스타일 (검색 필터 선택) */
+.search-category {
+  padding: 8px 5px;
+  width: 100px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* 검색 입력창 스타일 */
+.search-input {
+  flex-grow: 1;
+  max-width: 400px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* 검색 버튼 스타일 */
+.search-button {
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #99C4F4;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+/* 멘토링 공고 올리기 버튼 스타일 */
+.upload-button {
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #75b3f8;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.upload-button:hover {
+  background-color: #1475dc;
+}
+
+/* 메인 콘텐츠 영역 */
+.main-content {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* 사이드바 스타일 */
+.sidebar {
   padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 250px;
+  flex-shrink: 0;
+  align-self: flex-start;
 }
 
-/* 개별 카드 */
-.post-item {
-  width: 300px; /* 카드 너비 */
-  border: 1px solid #ddd; /* 테두리 */
-  border-radius: 10px; /* 모서리 둥글게 */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-  padding: 20px;
-  background-color: #fff; /* 배경색 */
-  text-align: center; /* 텍스트 중앙 정렬 */
-  transition: transform 0.2s, box-shadow 0.2s; /* 호버 효과 */
+.sidebar h3 {
+  font-size: 20px;
+  color: #333;
+  border-bottom: 2px solid #99C4F4;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
 }
 
-/* 카드 호버 효과 */
-.post-item:hover {
-  transform: scale(1.05); /* 살짝 확대 */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 그림자 강조 */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-/* 제목 스타일 */
-.post-item h4 {
-  font-size: 18px;
+.sidebar ul li {
+  padding: 12px;
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar ul li:hover {
+  background-color: #f1f1f1;
+  color: #000;
+}
+
+.sidebar ul li.active {
+  background-color: #99C4F4;
+  color: #fff;
   font-weight: bold;
+}
+
+.sidebar ul li:not(:last-child) {
   margin-bottom: 10px;
+}
+
+/* 포스트 리스트 컨테이너 */
+.post-container {
+  flex-grow: 1;
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 포스트 리스트 스타일 */
+.post-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.post-item {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.post-item h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
   color: #333;
 }
 
-/* 정보 스타일 */
 .post-item p {
-  font-size: 14px;
-  color: #666;
   margin: 5px 0;
+  font-size: 14px;
+  color: #555;
 }
 
-/* 검색창 스타일 */
-.search-container {
-  width: 100%;
+.post-item .star-rating {
+  font-size: 16px;
+  color: #ffc107;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-top: 20px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
-.search-input {
-  width: 60%;
+.pagination button {
   padding: 10px 15px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  outline: none;
-  transition: box-shadow 0.2s;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
 }
 
-.search-input:focus {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.pagination button.active {
+  background-color: #99C4F4;
+  color: #fff;
+  border-color: #99C4F4;
 }
 
+.pagination button:hover {
+  background-color: #f1f1f1;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .mentoring-page {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .search-container {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+
+  .main-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .post-list {
+    grid-template-columns: 1fr;
+  }
+}

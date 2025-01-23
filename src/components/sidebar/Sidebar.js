@@ -1,4 +1,5 @@
 import React from "react";
+import "../../styles/Sidebar.css"
 
 const Sidebar = ({ selectedField, setSelectedField }) => {
   const fields = ["전체", "FRONTEND", "BACKEND", "게임 개발", "인공지능", "데이터", "보안, 네트워크"];
