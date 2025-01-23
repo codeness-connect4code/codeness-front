@@ -5,12 +5,18 @@ import HomePage from "./pages/home/Home";
 import LoginPage from "./pages/auth/Login";
 import SignUpPage from "./pages/auth/SignUp";
 import CommunityPage from "./pages/community/PostMain";
-import NewsPage from "./pages/news/NewsMain";
+import NewsPage from "./pages/news/ViewNews";
 import MyPage from "./pages/mypage/profile/MyPage";
 import UserUpdatePage from "./pages/mypage/profile/UserUpdate";
 import Header from "./components/header/Header";
 import PaymentPage from "./pages/payment/Payment";
 import MentorRequestPage from "./pages/mentor-request/MentorRequest";
+import ViewReviewPage from "./pages/mypage/review/ViewReview";
+import WriteReviewPage from "./pages/mypage/review/WriteReview";
+import MainNewsPage from "./pages/news/ViewMainNews";
+import MentoringSearchPage from "./pages/mentoring/MentoringPostSearch";
+import MentoringPostFormPage from "./pages/mentoring/MentoringPostForm";
+
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -35,12 +41,18 @@ function App() {
           <Route path="/signup" component={SignUpPage} />
           <Route path="/community" component={CommunityPage} />
           <Route path="/news" component={NewsPage} />
-          <Route path="/payment" component={PaymentPage} />
+          <Route path="/mypage/payments/review/:paymentHistoryId" component={ViewReviewPage} />
+          <Route path="/mypage/payments/review" component={WriteReviewPage} />
+          <Route path="/main/news" component={MainNewsPage} />  {/* TODO: 나중에 삭제할 요소 */}
+          <Route path="/news" component={NewsPage} />
+          <Route path="/mentoring" component={MentoringSearchPage} />
 
           {/* 로그인 필요한 페이지는 PrivateRoute로 보호 */}
           <PrivateRoute path="/mypage" component={MyPage} />
           <PrivateRoute path="/user/update" component={UserUpdatePage} />
           <PrivateRoute path="/user/mentor" component={MentorRequestPage} />
+          <Route path="/payment" component={PaymentPage} />
+          <Route path="/mentoring-post-form" component={MentoringPostFormPage} />
         </Switch>
       </Router>
   );
