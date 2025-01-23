@@ -12,17 +12,17 @@ const Login = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/login",
-        {
-          email,
-          password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+          "http://localhost:8080/login",
+          {
+            email,
+            password,
           },
-          withCredentials: true, // CORS 요청에 credential 포함
-        }
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true, // CORS 요청에 credential 포함
+          }
       );
 
       // 응답 헤더에서 토큰 추출 (서버 응답 방식에 따라 조정 필요)
@@ -43,7 +43,7 @@ const Login = () => {
       if (error.response) {
         // 서버에서 보낸 에러 메시지 표시
         const errorMessage =
-          error.response.data?.message || error.response.data;
+            error.response.data?.message || error.response.data;
         setMessage(`로그인 실패: ${errorMessage}`);
       } else if (error.request) {
         // 요청은 보냈으나 응답을 받지 못한 경우
@@ -61,42 +61,42 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h2>로그인</h2>
-      <form onSubmit={handleLogin} className="login-form">
-        <div className="form-group">
-          <label>아이디:</label>
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+      <div className="login-container">
+        <h2>로그인</h2>
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="form-group">
+            <label>아이디:</label>
+            <input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+            />
+          </div>
+          <div className="form-group">
+            <label>비밀번호:</label>
+            <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+            />
+          </div>
+          <button type="submit" className="login-button">
+            로그인
+          </button>
+        </form>
+
+        {/* 구글 로그인 버튼 */}
+        <div className="social-login">
+          <button onClick={handleGoogleLogin} className="google-login-button">
+            Google로 로그인
+          </button>
         </div>
-        <div className="form-group">
-          <label>비밀번호:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="login-button">
-          로그인
-        </button>
-      </form>
 
-      {/* 구글 로그인 버튼 */}
-      <div className="social-login">
-        <button onClick={handleGoogleLogin} className="google-login-button">
-          Google로 로그인
-        </button>
-      </div>
+        {message && <p className="message">{message}</p>}
 
-      {message && <p className="message">{message}</p>}
-
-      <style jsx>{`
+        <style jsx>{`
         .login-container {
           max-width: 400px;
           margin: 0 auto;
@@ -161,7 +161,7 @@ const Login = () => {
           text-align: center;
         }
       `}</style>
-    </div>
+      </div>
   );
 };
 export default Login;
