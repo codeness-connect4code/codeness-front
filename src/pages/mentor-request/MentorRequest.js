@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../../styles/MentorRequest.css';
 
 const MentorApplicationForm = () => {
   const [formData, setFormData] = useState({
@@ -62,7 +63,6 @@ const MentorApplicationForm = () => {
           <select id="field" name="field" value={formData.field} onChange={handleChange}>
             <option value="FRONTEND">프론트엔드</option>
             <option value="BACKEND">백엔드</option>
-            <option value="FULLSTACK">풀스택</option>
           </select>
         </div>
         <div>

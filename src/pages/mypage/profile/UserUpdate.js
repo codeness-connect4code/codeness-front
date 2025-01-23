@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import '../../../styles/UserUpdate.css'
 
 const UserUpdate = () => {
   const [formData, setFormData] = useState({
