@@ -13,6 +13,7 @@ import PaymentPage from "./pages/payment/Payment";
 import ViewReviewPage from "./pages/mypage/review/ViewReview";
 import WriteReviewPage from "./pages/mypage/review/WriteReview";
 import MainNewsPage from "./pages/news/ViewMainNews";
+import MentorRequestPage from "./pages/mentor-request/MentorRequest";
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -38,6 +39,7 @@ function App() {
           <Route path="/community" component={CommunityPage} />
           <Route path="/news" component={NewsPage} />
           <Route path="/payment" component={PaymentPage} />
+<<<<<<< HEAD
           <Route path="/mypage/payments/review/:paymentHistoryId" component={ViewReviewPage} /> 
           <Route path="/mypage/payments/review" component={WriteReviewPage} />
           <Route path="/main/news" component={MainNewsPage} />  {/* TODO: 나중에 삭제할 요소 */}
@@ -47,6 +49,13 @@ function App() {
           <PrivateRoute path="/user/update" component={UserUpdatePage} />
           
 
+=======
+
+          {/* 로그인 필요한 페이지는 PrivateRoute로 보호 */}
+          <PrivateRoute path="/mypage" component={MyPage} />
+          <PrivateRoute path="/user/update" component={UserUpdatePage} />
+          <PrivateRoute path="/user/mentor" component={MentorRequestPage} />
+>>>>>>> 89059d5e1b438a71029729110bf5a542ed84b3e7
         </Switch>
       </Router>
   );
