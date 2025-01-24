@@ -13,7 +13,7 @@ import MentoringPaymentPage from "./pages/payment/MentoringPayment";
 import MentorRequestPage from "./pages/mentor-request/MentorRequest";
 import ViewReviewPage from "./pages/mypage/review/ViewReview";
 import WriteReviewPage from "./pages/mypage/review/WriteReview";
-import MainNewsPage from "./pages/news/ViewMainNews";
+import MainNewsPage from "./pages/news/MainNews";
 import MentoringPostSearchPage from "./pages/mentoring/MentoringPostSearch";
 import MentoringPostFormPage from "./pages/mentoring/MentoringPostForm";
 import MyPageHome from "./pages/mypage/MyPageHome";
