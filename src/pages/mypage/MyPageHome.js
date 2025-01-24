@@ -5,6 +5,7 @@ import UserSchedule from "./schedule/UserSchedule";
 import DeleteUser from "./delete-user/DeleteUser";
 import MentorRequestList from "./mentor-request/MentorRequestList";
 import { useHistory } from 'react-router-dom';
+import ChatLayout from './chat/ChatLayout';
 
 
  const MyPageHome = () => {
@@ -13,7 +14,7 @@ import { useHistory } from 'react-router-dom';
 
  const tabs = [
    { id: 'profile', label: '내 프로필' },
-   { id: 'schedule', label: '채팅 목록' },
+   { id: 'chatting', label: '채팅 목록' },
    { id: 'mentoring', label: '일정 목록' },
    { id: 'records', label: '거래 내역' },
    { id: 'reviews', label: '내 멘토링' },
@@ -51,7 +52,7 @@ import { useHistory } from 'react-router-dom';
      }}>
        {/* 각 탭에 해당하는 컴포넌트를 여기에 렌더링 */}   
        {activeTab === 'profile' && <MyPage />}
-       {activeTab === 'schedule' && <div>채팅 목록 컨텐츠</div>}
+       {activeTab === 'chatting' && <ChatLayout />}
        {activeTab === 'mentoring' && <UserSchedule/>}
        {activeTab === 'records' && <div>일정 목록 컨텐츠</div>}
        {activeTab === 'withdraw' && <DeleteUser/>}
