@@ -22,6 +22,7 @@ import DeleteUserPage from "./pages/mypage/delete-user/DeleteUser";
 import MentorRequestListPage from "./pages/mypage/mentor-request/MentorRequestList";
 import MentoringPostDetailPage from "./pages/mentoring/MentoringPostDetail";
 import MentoringReservationPage from "./pages/payment/MentoringReservation";
+import WritePostPage from "./pages/community/PostWrite";
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -51,6 +52,7 @@ function App() {
           <Route path="/main/news" component={MainNewsPage} />  {/* TODO: 나중에 삭제할 요소 */}
           <Route path="/news" component={NewsPage} />
           <Route path="/mypage/profile" component={MyPageHome} />
+          <PrivateRoute path="/writePost" component={WritePostPage} />
 
           <PrivateRoute path="/mentoring/:mentoringPostId/mentoring-reservation" component={MentoringReservationPage} />
           <Route path="/mentoring/:mentoringPostId" component={MentoringPostDetailPage} />
