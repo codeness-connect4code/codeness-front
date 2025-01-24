@@ -6,3 +6,22 @@ a{
 a:hover{
     color: #5050FF;
 }
+
+.company-container{
+  border: 2px solid gray;
+  border-radius: 20px;
+  width: 600px;
+
+}
+
+.company-container div{
+  margin-bottom: 20px;
+  text-align: center;
+
+}
+
+.company-container div p{
+  font-size: 25px;
+  margin: 0;  
+  padding: 0;
+}

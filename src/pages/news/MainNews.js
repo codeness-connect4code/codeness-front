@@ -30,14 +30,12 @@ const MainNewsList = () => {
  return (
    <section
     style={{
-        margin: "5px",
-        display: "inline-block",
-        width: "40%"
+        width: "100%"
     }}
    >
      <h2>최신 뉴스</h2>
      <div style={{
-        width: "80%",
+        width: "60%",
         border: "2px solid gray",
         borderRadius: "10px",
         padding: "10px"
