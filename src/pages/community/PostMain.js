@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import Pagination from "../../components/Pagenation";
 
 const CommunityPage = () => {
   const [posts, setPosts] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [filter, setFilter] = useState("제목"); // 검색 기준 상태 추가
+  const [filter, setFilter] = useState("제목");
   const [currentTab, setCurrentTab] = useState("전체");
-  const [isSearchTriggered, setIsSearchTriggered] = useState(false); // 검색 버튼 클릭 여부
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [lastSearchParams, setLastSearchParams] = useState(null);
 
-  // 탭과 PostType 매핑 객체
+  const pageSize = 10; // 페이지 크기 설정
+  const isFetching = useRef(false); // 중복 요청 방지 플래그
+
   const postTypeMapping = {
     전체: null,
     "질문 게시판": "QUESTION",
@@ -16,56 +21,71 @@ const CommunityPage = () => {
     공지사항: "NOTICE",
   };
 
-  // axios 기본 설정
+  // Axios 기본 설정
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
-    axios.defaults.baseURL = "http://localhost:8080"; // 서버 URL 설정
+    axios.defaults.baseURL = "http://localhost:8080";
   }, []);
 
   // 데이터 요청 함수
   const fetchPosts = async (params = {}) => {
+    if (isFetching.current) return; // 요청 중이라면 실행하지 않음
+    isFetching.current = true;
     try {
       const response = await axios.get("/posts", { params });
-      console.log("응답 데이터:", response.data); // 응답 데이터 로그
-      setPosts(response.data.data.content || []); // 데이터가 없을 경우 빈 배열로 설정
+      setPosts(response.data.data.content || []);
+      setTotalPages(response.data.data.totalPages || 1);
+      setCurrentPage(params.pageNumber + 1); // 백엔드의 pageNumber(0-based)를 1-based로 변환
     } catch (error) {
       console.error("Failed to fetch posts:", error);
       alert("데이터를 가져오는 중 오류가 발생했습니다.");
+    } finally {
+      isFetching.current = false; // 요청 종료 후 플래그 해제
     }
   };
 
-  // 초기 데이터 로드 (페이지 진입 시)
+  // 초기 데이터 로드 및 페이지 변경
   useEffect(() => {
-    fetchPosts({
+    const params = lastSearchParams || {
       postType: postTypeMapping[currentTab] || null,
-    });
-  }, [currentTab]);
+      pageNumber: currentPage - 1, // 0-based 페이지 번호로 변환
+      size: pageSize, // 페이지 크기
+    };
 
-  // 검색 버튼 클릭 시 검색 실행
-  useEffect(() => {
-    if (isSearchTriggered) {
-      const params = {
-        postType: postTypeMapping[currentTab] || null,
-      };
+    fetchPosts(params);
+  }, [currentTab, currentPage, lastSearchParams]);
 
-      if (filter === "제목") {
-        params.keyword = searchKeyword;
-      } else if (filter === "작성자") {
-        params.writer = searchKeyword;
-      }
+  // 검색 실행
+  const handleSearch = () => {
+    setCurrentPage(1); // 검색 시 항상 첫 페이지로 이동
+    const params = {
+      postType: postTypeMapping[currentTab] || null,
+      pageNumber: 0, // 검색 시 항상 첫 페이지로 시작
+      size: pageSize,
+    };
 
-      fetchPosts(params);
-      setIsSearchTriggered(false); // 검색 후 초기화
+    if (filter === "제목") {
+      params.keyword = searchKeyword;
+    } else if (filter === "작성자") {
+      params.writer = searchKeyword;
     }
-  }, [isSearchTriggered]);
 
-  // 탭 변경 시 검색어 초기화
+    setLastSearchParams(params); // 마지막 검색 조건 저장
+    fetchPosts(params); // 검색 버튼 클릭 시 서버 요청 실행
+  };
+
   const handleTabChange = (tab) => {
     setCurrentTab(tab);
-    setSearchKeyword(""); // 검색어 초기화
+    setSearchKeyword(""); // 탭 변경 시 검색어 초기화
+    setCurrentPage(1); // 탭 변경 시 페이지를 1로 초기화
+    setLastSearchParams(null); // 검색 조건 초기화
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page); // 페이지 상태 업데이트
   };
 
   return (
@@ -73,12 +93,7 @@ const CommunityPage = () => {
         <div className="main-content">
           {/* 사이드바 */}
           <aside className="sidebar">
-            {[
-              "전체",
-              "질문 게시판",
-              "자유 게시판",
-              "공지사항",
-            ].map((tab) => (
+            {["전체", "질문 게시판", "자유 게시판", "공지사항"].map((tab) => (
                 <button
                     key={tab}
                     className={`tab-button ${currentTab === tab ? "active" : ""}`}
@@ -96,7 +111,7 @@ const CommunityPage = () => {
               <select
                   className="filter"
                   value={filter}
-                  onChange={(e) => setFilter(e.target.value)} // 검색 기준 변경
+                  onChange={(e) => setFilter(e.target.value)}
               >
                 <option>제목</option>
                 <option>작성자</option>
@@ -106,12 +121,9 @@ const CommunityPage = () => {
                   className="search-input"
                   placeholder={filter === "제목" ? "제목을 입력하세요" : "작성자를 입력하세요"}
                   value={searchKeyword}
-                  onChange={(e) => setSearchKeyword(e.target.value)} // 검색어 업데이트
+                  onChange={(e) => setSearchKeyword(e.target.value)} // 상태만 업데이트
               />
-              <button
-                  className="search-button"
-                  onClick={() => setIsSearchTriggered(true)} // 검색 버튼 클릭 시 트리거 설정
-              >
+              <button className="search-button" onClick={handleSearch}>
                 검색
               </button>
             </div>
@@ -135,7 +147,7 @@ const CommunityPage = () => {
                   </tr>
               ) : (
                   posts.map((post) => (
-                      <tr key={post.postId}>
+                      <tr key={post.id}>
                         <td>{post.title}</td>
                         <td>{post.writer}</td>
                         <td>{post.view}</td>
@@ -145,6 +157,13 @@ const CommunityPage = () => {
               )}
               </tbody>
             </table>
+
+            {/* 페이지네이션 */}
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
           </section>
         </div>
 
@@ -176,7 +195,7 @@ const CommunityPage = () => {
             border: 1px solid #ddd;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            color: black;
           }
 
           .tab-button.active {
@@ -196,32 +215,37 @@ const CommunityPage = () => {
           }
 
           .filter {
-            padding: 10px;
+            padding: 5px 8px;
             margin-right: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            height: 40px;
+            width: 120px;
+            font-size: 14px;
           }
 
           .search-input {
             flex: 1;
-            padding: 10px;
+            padding: 8px 12px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            height: 40px;
+            font-size: 14px;
           }
 
           .search-button {
-            padding: 10px 15px;
-            margin-left: 10px;
+            padding: 0;
+            margin-left: 8px;
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
+            height: 40px;
+            font-size: 14px;
             cursor: pointer;
-            transition: background-color 0.2s;
-          }
-
-          .search-button:hover {
-            background-color: #0056b3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
 
           .post-table {
@@ -229,19 +253,32 @@ const CommunityPage = () => {
             border-collapse: collapse;
           }
 
-          .post-table th, .post-table td {
+          .post-table th,
+          .post-table td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: left;
           }
 
-          .post-table th {
-            background-color: #f4f4f4;
+          .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
           }
 
-          .no-posts {
-            text-align: center;
-            color: #888;
+          .page-button {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            color: black;
+          }
+
+          .page-button.active {
+            background-color: #007bff;
+            color: white;
           }
         `}</style>
       </div>
