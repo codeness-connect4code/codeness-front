@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import HomePage from "./pages/home/Home";
 import LoginPage from "./pages/auth/Login";
 import SignUpPage from "./pages/auth/SignUp";
-import CommunityPage from "./pages/community/CommunityMain";
+import CommunityPage from "./pages/community/PostMain";
 import NewsPage from "./pages/news/ViewNews";
 import MyPage from "./pages/mypage/profile/MyPage";
 import UserUpdatePage from "./pages/mypage/profile/UserUpdate";
@@ -18,6 +18,8 @@ import MentoringPostSearchPage from "./pages/mentoring/MentoringPostSearch";
 import MentoringPostFormPage from "./pages/mentoring/MentoringPostForm";
 import MyPageHome from "./pages/mypage/MyPageHome";
 import UserSchedulePage from "./pages/mypage/schedule/UserSchedule";
+import DeleteUserPage from "./pages/mypage/delete-user/DeleteUser";
+import MentorRequestListPage from "./pages/mypage/mentor-request/MentorRequestList";
 import MentoringPostDetailPage from "./pages/mentoring/MentoringPostDetail";
 import MentoringReservationPage from "./pages/payment/MentoringReservation";
 
@@ -59,8 +61,10 @@ function App() {
           <PrivateRoute path="/user/update" component={UserUpdatePage} />
           <PrivateRoute path="/user/mentor" component={MentorRequestPage} />
           <PrivateRoute path="/payment" component={MentoringPaymentPage} />
-          <Route path="/schedule" component={UserSchedulePage} />
           <PrivateRoute path="/mentoring-post-form" component={MentoringPostFormPage} />
+          <Route path="/schedule" component={UserSchedulePage} />
+          <Route path="/delete-user" component={DeleteUserPage} />
+          <Route path="/mentor-request-list" component={MentorRequestListPage} />
         </Switch>
       </Router>
   );
