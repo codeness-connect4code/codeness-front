@@ -20,6 +20,8 @@ import MyPageHome from "./pages/mypage/MyPageHome";
 import UserSchedulePage from "./pages/mypage/schedule/UserSchedule";
 import DeleteUserPage from "./pages/mypage/delete-user/DeleteUser";
 import MentorRequestListPage from "./pages/mypage/mentor-request/MentorRequestList";
+import AdminMyPageHomePage from "./pages/admin/AdminMyPageHome";
+import MentorRequestDetail from "./pages/admin/mentor-request/MentorRequestDetail";
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -52,7 +54,7 @@ function App() {
           <Route path="/mypage/profile" component={MyPageHome} />
           
           {/* 로그인 필요한 페이지는 PrivateRoute로 보호 */}
-          <PrivateRoute path="/mypage" component={MyPage} />
+          <PrivateRoute path="/profile" component={MyPage} />
           <PrivateRoute path="/user/update" component={UserUpdatePage} />
           <PrivateRoute path="/user/mentor" component={MentorRequestPage} />
           <Route path="/payment" component={PaymentPage} />
@@ -60,6 +62,8 @@ function App() {
           <Route path="/mentoring-post-form" component={MentoringPostFormPage} />
           <Route path="/delete-user" component={DeleteUserPage} />
           <Route path="/mentor-request-list" component={MentorRequestListPage} />
+          <Route path="/admin" component={AdminMyPageHomePage} />
+          <Route path="/admin/mentor-requests/:mentorId" component={MentorRequestDetail}/>
         </Switch>
       </Router>
   );
