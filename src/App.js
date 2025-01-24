@@ -9,7 +9,7 @@ import NewsPage from "./pages/news/ViewNews";
 import MyPage from "./pages/mypage/profile/MyPage";
 import UserUpdatePage from "./pages/mypage/profile/UserUpdate";
 import Header from "./components/header/Header";
-import PaymentPage from "./pages/payment/Payment";
+import MentoringPaymentPage from "./pages/payment/MentoringPayment";
 import MentorRequestPage from "./pages/mentor-request/MentorRequest";
 import ViewReviewPage from "./pages/mypage/review/ViewReview";
 import WriteReviewPage from "./pages/mypage/review/WriteReview";
@@ -20,7 +20,12 @@ import MyPageHome from "./pages/mypage/MyPageHome";
 import UserSchedulePage from "./pages/mypage/schedule/UserSchedule";
 import DeleteUserPage from "./pages/mypage/delete-user/DeleteUser";
 import MentorRequestListPage from "./pages/mypage/mentor-request/MentorRequestList";
+<<<<<<< HEAD
 import './styles/index.css';
+=======
+import MentoringPostDetailPage from "./pages/mentoring/MentoringPostDetail";
+import MentoringReservationPage from "./pages/payment/MentoringReservation";
+>>>>>>> develop
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -49,16 +54,19 @@ function App() {
           <Route path="/mypage/payments/review" component={WriteReviewPage} />
           <Route path="/main/news" component={MainNewsPage} />  {/* TODO: 나중에 삭제할 요소 */}
           <Route path="/news" component={NewsPage} />
-          <Route path="/mentoring" component={MentoringPostSearchPage} />
           <Route path="/mypage/profile" component={MyPageHome} />
-          
+
+          <PrivateRoute path="/mentoring/:mentoringPostId/mentoring-reservation" component={MentoringReservationPage} />
+          <Route path="/mentoring/:mentoringPostId" component={MentoringPostDetailPage} />
+          <Route path="/mentoring" component={MentoringPostSearchPage} />
+
           {/* 로그인 필요한 페이지는 PrivateRoute로 보호 */}
           <PrivateRoute path="/mypage" component={MyPage} />
           <PrivateRoute path="/user/update" component={UserUpdatePage} />
           <PrivateRoute path="/user/mentor" component={MentorRequestPage} />
-          <Route path="/payment" component={PaymentPage} />
+          <PrivateRoute path="/payment" component={MentoringPaymentPage} />
+          <PrivateRoute path="/mentoring-post-form" component={MentoringPostFormPage} />
           <Route path="/schedule" component={UserSchedulePage} />
-          <Route path="/mentoring-post-form" component={MentoringPostFormPage} />
           <Route path="/delete-user" component={DeleteUserPage} />
           <Route path="/mentor-request-list" component={MentorRequestListPage} />
         </Switch>
