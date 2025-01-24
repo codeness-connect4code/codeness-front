@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import MentorRecommendation from './MentorRecommendation';
 
 function Home() {
   const history = useHistory();
@@ -10,7 +11,7 @@ function Home() {
 
   return (
       <div>
-        <h1>Welcome to the Home Page</h1>
+        <MentorRecommendation />
         <div className="update-button-container">
           <button className="mentor-request-button" onClick={handleMentorRequest}>
             멘토 신청하러 가기

@@ -20,8 +20,12 @@ import MyPageHome from "./pages/mypage/MyPageHome";
 import UserSchedulePage from "./pages/mypage/schedule/UserSchedule";
 import DeleteUserPage from "./pages/mypage/delete-user/DeleteUser";
 import MentorRequestListPage from "./pages/mypage/mentor-request/MentorRequestList";
+<<<<<<< HEAD
+import './styles/index.css';
+=======
 import MentoringPostDetailPage from "./pages/mentoring/MentoringPostDetail";
 import MentoringReservationPage from "./pages/payment/MentoringReservation";
+>>>>>>> develop
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
