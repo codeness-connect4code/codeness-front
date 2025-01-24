@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { Link, useHistory } from "react-router-dom";
 import Pagination from "../../components/Pagenation";
 
 const CommunityPage = () => {
@@ -11,6 +12,8 @@ const CommunityPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [lastSearchParams, setLastSearchParams] = useState(null);
 
+  const history = useHistory();
+
   const pageSize = 10; // 페이지 크기 설정
   const isFetching = useRef(false); // 중복 요청 방지 플래그
 
@@ -20,7 +23,6 @@ const CommunityPage = () => {
     "자유 게시판": "FREE",
     공지사항: "NOTICE",
   };
-
   // Axios 기본 설정
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -88,6 +90,10 @@ const CommunityPage = () => {
     setCurrentPage(page); // 페이지 상태 업데이트
   };
 
+  const goToWritePage = () => {
+    history.push("/writePost");
+  };
+
   return (
       <div className="community-page">
         <div className="main-content">
@@ -125,6 +131,9 @@ const CommunityPage = () => {
               />
               <button className="search-button" onClick={handleSearch}>
                 검색
+              </button>
+              <button className="write-button" onClick={goToWritePage}>
+                글쓰기
               </button>
             </div>
 
@@ -241,6 +250,23 @@ const CommunityPage = () => {
             border: none;
             border-radius: 10px;
             height: 40px;
+            width: 120px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .write-button {
+            padding: 0;
+            margin-left: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            height: 40px;
+            width: 100px;
             font-size: 14px;
             cursor: pointer;
             display: flex;
@@ -260,25 +286,16 @@ const CommunityPage = () => {
             text-align: left;
           }
 
-          .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-          }
-
           .page-button {
             padding: 10px 15px;
             margin: 0 5px;
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            background-color: #007bff !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 10px !important;
             cursor: pointer;
-            color: black;
-          }
-
-          .page-button.active {
-            background-color: #007bff;
-            color: white;
+            font-weight: bold;
+            font-size: 14px;
           }
         `}</style>
       </div>
