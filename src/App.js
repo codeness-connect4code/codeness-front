@@ -1,4 +1,3 @@
-// App.js
 import React from "react";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import HomePage from "./pages/home/Home";
@@ -9,7 +8,7 @@ import NewsPage from "./pages/news/ViewNews";
 import MyPage from "./pages/mypage/profile/MyPage";
 import UserUpdatePage from "./pages/mypage/profile/UserUpdate";
 import Header from "./components/header/Header";
-import PaymentPage from "./pages/payment/Payment";
+import MentoringPaymentPage from "./pages/payment/MentoringPayment";
 import MentorRequestPage from "./pages/mentor-request/MentorRequest";
 import ViewReviewPage from "./pages/mypage/review/ViewReview";
 import WriteReviewPage from "./pages/mypage/review/WriteReview";
@@ -19,11 +18,10 @@ import MentoringPostFormPage from "./pages/mentoring/MentoringPostForm";
 import MyPageHome from "./pages/mypage/MyPageHome";
 import UserSchedulePage from "./pages/mypage/schedule/UserSchedule";
 import DeleteUserPage from "./pages/mypage/delete-user/DeleteUser";
-import MentorRequestListPage from "./pages/mypage/mentor-request/MentorRequestList";
-import AdminMyPageHomePage from "./pages/admin/AdminMyPageHome";
-import MentorRequestDetail from "./pages/admin/mentor-request/MentorRequestDetail";
+import MentoringPostDetailPage from "./pages/mentoring/MentoringPostDetail";
+import MentoringReservationPage from "./pages/payment/MentoringReservation";
+import AdminRoutes from "./pages/admin/mentor-request/AdminRoutes";
 
-// 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = !!localStorage.getItem("jwtToken");
   return (
@@ -39,8 +37,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 function App() {
   return (
       <Router>
-        <Header /> {/* 모든 페이지에 헤더 추가 */}
+        <Header />
         <Switch>
+          <Route path="/admin" component={AdminRoutes} />
           <Route exact path="/" component={HomePage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/signup" component={SignUpPage} />
@@ -48,22 +47,21 @@ function App() {
           <Route path="/news" component={NewsPage} />
           <Route path="/mypage/payments/review/:paymentHistoryId" component={ViewReviewPage} />
           <Route path="/mypage/payments/review" component={WriteReviewPage} />
-          <Route path="/main/news" component={MainNewsPage} />  {/* TODO: 나중에 삭제할 요소 */}
+          <Route path="/main/news" component={MainNewsPage} />
           <Route path="/news" component={NewsPage} />
-          <Route path="/mentoring" component={MentoringPostSearchPage} />
           <Route path="/mypage/profile" component={MyPageHome} />
-          
-          {/* 로그인 필요한 페이지는 PrivateRoute로 보호 */}
+
+          <PrivateRoute path="/mentoring/:mentoringPostId/mentoring-reservation" component={MentoringReservationPage} />
+          <Route path="/mentoring/:mentoringPostId" component={MentoringPostDetailPage} />
+          <Route path="/mentoring" component={MentoringPostSearchPage} />
+
           <PrivateRoute path="/profile" component={MyPage} />
           <PrivateRoute path="/user/update" component={UserUpdatePage} />
           <PrivateRoute path="/user/mentor" component={MentorRequestPage} />
-          <Route path="/payment" component={PaymentPage} />
+          <PrivateRoute path="/payment" component={MentoringPaymentPage} />
+          <PrivateRoute path="/mentoring-post-form" component={MentoringPostFormPage} />
           <Route path="/schedule" component={UserSchedulePage} />
-          <Route path="/mentoring-post-form" component={MentoringPostFormPage} />
           <Route path="/delete-user" component={DeleteUserPage} />
-          <Route path="/mentor-request-list" component={MentorRequestListPage} />
-          <Route path="/admin" component={AdminMyPageHomePage} />
-          <Route path="/admin/mentor-requests/:mentorId" component={MentorRequestDetail}/>
         </Switch>
       </Router>
   );

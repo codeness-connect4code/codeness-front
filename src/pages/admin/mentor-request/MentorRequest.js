@@ -40,7 +40,7 @@ const MentorRequestList = ({ history }) => {
   };
 
   const handleCardClick = (mentorId) => {
-    history.push(`/admin/mentor-requests/${mentorId}`);
+    history.push(`/admin/mentor-request/${mentorId}`);
   };
 
   if (loading) return <div className="loading-spinner" />;

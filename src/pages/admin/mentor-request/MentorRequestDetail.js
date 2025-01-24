@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import '../../../styles/admin/MentorRequestDetail.css';
 
 const MentorRequestDetail = () => {
   const [request, setRequest] = useState(null);
@@ -10,38 +9,47 @@ const MentorRequestDetail = () => {
   const { mentorId } = useParams();
 
   useEffect(() => {
+    const fetchMentorRequestDetail = async () => {
+      try {
+        const token = localStorage.getItem('jwtToken');
+        const response = await axios.get(`/admin/mentors/mentor-requests/${mentorId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        setRequest(response.data.data);
+        setLoading(false);
+      } catch (error) {
+        setError('상세 정보 조회에 실패했습니다.');
+        setLoading(false);
+      }
+    };
+
     fetchMentorRequestDetail();
   }, [mentorId]);
-
-  const fetchMentorRequestDetail = async () => {
-    try {
-      const token = localStorage.getItem('jwtToken');
-      const response = await axios.get(`/admin/mentors/mentor-requests/${mentorId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setRequest(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      setError('상세 정보 조회에 실패했습니다.');
-      setLoading(false);
-    }
-  };
 
   const handleUpdateStatus = async (status) => {
     try {
       const token = localStorage.getItem('jwtToken');
       await axios.patch(`/admin/mentors/mentor-requests/${mentorId}`,
           { isAccepted: status },
-          { headers: { Authorization: `Bearer ${token}` }}
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
       );
-      fetchMentorRequestDetail();
+      window.location.reload();
     } catch (error) {
       setError('상태 업데이트 실패');
     }
   };
 
-  if (loading) return <div className="loading-spinner" />;
-  if (error) return <div className="error-message">{error}</div>;
+  if (loading) return <div>로딩 중...</div>;
+  if (error) return <div>{error}</div>;
   if (!request) return <div>멘토 신청 정보가 없습니다.</div>;
 
   return (
@@ -69,18 +77,8 @@ const MentorRequestDetail = () => {
           </div>
 
           <div className="action-buttons">
-            <button
-                onClick={() => handleUpdateStatus('ACCEPTED')}
-                className="accept-button"
-            >
-              수락
-            </button>
-            <button
-                onClick={() => handleUpdateStatus('REJECTED')}
-                className="reject-button"
-            >
-              거절
-            </button>
+            <button onClick={() => handleUpdateStatus('ACCEPTED')}>수락</button>
+            <button onClick={() => handleUpdateStatus('REJECTED')}>거절</button>
           </div>
         </div>
       </div>

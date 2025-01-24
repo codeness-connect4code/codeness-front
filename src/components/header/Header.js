@@ -21,7 +21,7 @@ const Header = () => {
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       if (payload.role === 'ADMIN') {
-        history.push('/admin/mypage/mentor-request');
+        history.push('/admin/mentor-request');
       } else {
         history.push('/mypage/profile');
       }
