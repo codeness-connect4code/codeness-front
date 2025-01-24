@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import HomePage from "./pages/home/Home";
 import LoginPage from "./pages/auth/Login";
 import SignUpPage from "./pages/auth/SignUp";
-import CommunityPage from "./pages/community/PostMain";
+import CommunityPage from "./pages/community/CommunityMain";
 import NewsPage from "./pages/news/ViewNews";
 import MyPage from "./pages/mypage/profile/MyPage";
 import UserUpdatePage from "./pages/mypage/profile/UserUpdate";
