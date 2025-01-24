@@ -49,7 +49,7 @@ const MainPosts = () => {
         key={item.id}>
         <a className='news-link'
           rel='noopener noreferrer'
-          href='/community'>{item.title}
+          href='/community'>{item.title} {/* TODO: 나중에 이부분 상세 url로 바꿔야함! */}
         </a>
       </div>
       ))}
