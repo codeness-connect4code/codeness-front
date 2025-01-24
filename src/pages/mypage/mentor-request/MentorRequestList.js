@@ -3,14 +3,14 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import '../../../styles/mypage/mentor-request/MentorRequestList.css'
 
-const MentorRequestCard = ({ request }) => (
+const MentorRequestCard = ({ request, onDelete }) => (
     <div className="mentor-card">
       <div className="card-header">
         <h3 className="position">{request.position}</h3>
         <span className={`status-badge status-${request.isAccepted.toLowerCase()}`}>
-        {request.isAccepted === 'WAITING' ? '대기 중' :
-            request.isAccepted === 'ACCEPTED' ? '승인됨' : '거절됨'}
-      </span>
+         {request.isAccepted === 'WAITING' ? '대기 중' :
+             request.isAccepted === 'ACCEPTED' ? '승인됨' : '거절됨'}
+       </span>
       </div>
       <div className="card-content">
         <div className="info-row">
@@ -21,6 +21,14 @@ const MentorRequestCard = ({ request }) => (
           <span>경력</span>
           <span>{request.career}년</span>
         </div>
+        {request.isAccepted === 'REJECTED' && (
+            <button
+                onClick={() => onDelete(request.requestId)}
+                className="delete-button"
+            >
+              삭제
+            </button>
+        )}
       </div>
     </div>
 );
@@ -60,6 +68,7 @@ const MentorRequestPage = () => {
       const response = await axios.get('/users/mentors', {
         headers: { Authorization: `Bearer ${token.trim()}` }
       });
+      console.log('Mentor requests:', response.data.data); // 데이터 구조 확인
       setMentorRequests(response.data.data || []);
     } catch (error) {
       console.error('Mentor requests error:', error);
@@ -74,6 +83,21 @@ const MentorRequestPage = () => {
     }
   };
 
+  const handleDelete = async (requestId) => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      await axios.delete(`/users/mentors/${requestId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setMentorRequests(prevRequests =>
+          prevRequests.filter(request => request.requestId !== requestId)
+      );
+    } catch (error) {
+      setError('삭제에 실패했습니다.');
+      console.error('Delete error:', error);
+    }
+  };
+
   if (loading) return <div className="loading-spinner" />;
 
   return (
@@ -84,7 +108,11 @@ const MentorRequestPage = () => {
         ) : mentorRequests.length > 0 ? (
             <div className="card-grid">
               {mentorRequests.map((request, index) => (
-                  <MentorRequestCard key={index} request={request} />
+                  <MentorRequestCard
+                      key={index}
+                      request={request}
+                      onDelete={handleDelete}
+                  />
               ))}
             </div>
         ) : (
