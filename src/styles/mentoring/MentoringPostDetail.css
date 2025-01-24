@@ -1,0 +1,194 @@
+/* MentoringPostDetail.css */
+
+/* 전체 페이지 레이아웃 */
+.mentoring-page {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 프로필 및 공고 정보 섹션 */
+.mentor-profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+}
+
+.mentor-image-container {
+  margin-right: 40px; /* 이미지와 텍스트 사이 간격 확장 */
+}
+
+.mentor-profile img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 50px;
+  margin-left: 50px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mentor-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mentor-details h1 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.mentor-details h2 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0 0 5px 0;
+  color: #666;
+}
+
+.mentor-details .post-data {
+  font-size: 0.9rem;
+  margin: 5px 0;
+  color: #555;
+}
+
+
+.mentoring-info p {
+  font-size: 1rem;
+  margin: 5px 0;
+  color: #555;
+}
+
+/* 리뷰 섹션 */
+.reviews {
+  margin-top: 30px;
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reviews h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.review {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  text-align: center;
+}
+
+.review p {
+  margin: 5px 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.review p:first-child {
+  font-weight: bold;
+  color: #3b82f6;
+}
+
+/* 별점 스타일 */
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 1.2rem;
+}
+
+.star-rating .filled-star {
+  color: #ffc107; /* 채워진 별 색상 */
+}
+
+/* 멘토링 신청 버튼 */
+.apply-button {
+  display: inline-block;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+.apply-button:hover {
+  background-color: #2563eb;
+}
+
+/* 페이지네이션 섹션 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  color: #333;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.pagination button.active {
+  background-color: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+.pagination button:hover {
+  background-color: #f1f1f1;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .mentor-profile {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mentor-image-container {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+
+  .mentor-details {
+    text-align: center;
+  }
+
+  .mentor-details h1 {
+    font-size: 1.4rem;
+  }
+}

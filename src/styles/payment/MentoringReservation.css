@@ -1,0 +1,131 @@
+/* MentoringReservation.css */
+
+/* 전체 컨테이너 스타일 */
+.mentoring-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  padding: 20px;
+}
+
+/* 카드 스타일 */
+.mentoring-card {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* 제목 스타일 */
+.mentoring-card-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #333;
+}
+
+/* 프로필 섹션 */
+.mentoring-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.mentoring-profile-img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin-right: 16px;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mentoring-profile-details {
+  flex: 1;
+}
+
+.mentor-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 4px;
+}
+
+.mentoring-profile-details p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* 스케줄 섹션 */
+.mentoring-schedule {
+  margin-top: 1rem;
+}
+
+.mentoring-schedule-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.mentoring-schedule-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mentoring-schedule-item {
+  padding: 10px 16px;
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.mentoring-schedule-item:hover {
+  background-color: #f0f4ff;
+  border-color: #3b82f6;
+}
+
+.mentoring-schedule-item.selected {
+  background-color: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+/* 버튼 스타일 */
+.mentoring-button {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 1rem;
+}
+
+.mentoring-button:hover {
+  background-color: #2563eb;
+}
+
+.mentoring-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
