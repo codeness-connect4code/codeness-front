@@ -1,4 +1,4 @@
-// MyPageHome.js
+// AdminMyPageHome.js
 import React, { useState } from 'react';
 import MyPage from './profile/MyPage';
 import UserSchedule from "./schedule/UserSchedule";

@@ -8,9 +8,9 @@ const MentorRequestCard = ({ request, onDelete }) => (
       <div className="card-header">
         <h3 className="position">{request.position}</h3>
         <span className={`status-badge status-${request.isAccepted.toLowerCase()}`}>
-         {request.isAccepted === 'WAITING' ? '대기 중' :
-             request.isAccepted === 'ACCEPTED' ? '승인됨' : '거절됨'}
-       </span>
+       {request.isAccepted === 'WAITING' ? '대기 중' :
+           request.isAccepted === 'ACCEPTED' ? '승인됨' : '거절됨'}
+     </span>
       </div>
       <div className="card-content">
         <div className="info-row">
@@ -23,7 +23,7 @@ const MentorRequestCard = ({ request, onDelete }) => (
         </div>
         {request.isAccepted === 'REJECTED' && (
             <button
-                onClick={() => onDelete(request.requestId)}
+                onClick={() => onDelete(request.id)}
                 className="delete-button"
             >
               삭제
@@ -37,58 +37,37 @@ const MentorRequestPage = () => {
   const [mentorRequests, setMentorRequests] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [userRole, setUserRole] = useState(null);
   const history = useHistory();
 
   useEffect(() => {
-    checkRoleAndFetch();
+    fetchMentorRequests();
   }, []);
 
   const validateToken = (token) => {
-    if (!token) return { isValid: false, role: null };
+    if (!token) return false;
     try {
       const parts = token.split('.');
-      if (parts.length !== 3) return { isValid: false, role: null };
+      if (parts.length !== 3) return false;
       const payload = JSON.parse(atob(parts[1]));
-      console.log('Token payload:', payload);
-      return {
-        isValid: !(payload.exp && payload.exp < Date.now() / 1000),
-        role: payload.role || payload.Role || payload.userRole
-      };
-    } catch (error) {
-      console.error('Token validation error:', error);
-      return { isValid: false, role: null };
+      return !(payload.exp && payload.exp < Date.now() / 1000);
+    } catch {
+      return false;
     }
   };
 
-  const checkRoleAndFetch = async () => {
+  const fetchMentorRequests = async () => {
     const token = localStorage.getItem('jwtToken');
-    const { isValid, role } = validateToken(token);
-
-    console.log('Token validation:', { isValid, role });
-
-    if (!isValid) {
+    if (!validateToken(token)) {
       localStorage.removeItem('jwtToken');
       history.push('/login');
       return;
     }
 
-    setUserRole(role);
-
-    if (role === 'MENTEE') {
-      await fetchMentorRequests();
-    }
-
-    setLoading(false);
-  };
-
-  const fetchMentorRequests = async () => {
-    const token = localStorage.getItem('jwtToken');
     try {
+      setLoading(true);
       const response = await axios.get('/users/mentors', {
         headers: { Authorization: `Bearer ${token.trim()}` }
       });
-      console.log('Mentor requests:', response.data.data);
       setMentorRequests(response.data.data || []);
     } catch (error) {
       console.error('Mentor requests error:', error);
@@ -98,6 +77,8 @@ const MentorRequestPage = () => {
       } else {
         setError('멘토 요청 정보를 불러오는 데 실패했습니다.');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,7 +89,7 @@ const MentorRequestPage = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMentorRequests(prevRequests =>
-          prevRequests.filter(request => request.requestId !== requestId)
+          prevRequests.filter(request => request.id !== requestId)
       );
     } catch (error) {
       setError('삭제에 실패했습니다.');
@@ -117,16 +98,6 @@ const MentorRequestPage = () => {
   };
 
   if (loading) return <div className="loading-spinner" />;
-
-  if (userRole !== 'MENTEE') {
-    return (
-        <div className="mentor-request-container">
-          <div className="info-message">
-            멘토/관리자용 페이지 구현 예정입니다.
-          </div>
-        </div>
-    );
-  }
 
   return (
       <div className="mentor-request-container">
