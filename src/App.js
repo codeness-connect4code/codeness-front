@@ -1,36 +1,75 @@
+// App.js
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"; // Switch 추가
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import HomePage from "./pages/home/Home";
 import LoginPage from "./pages/auth/Login";
-import PaymentPage from "./pages/payment/Payment";
 import SignUpPage from "./pages/auth/SignUp";
-import LogoutPage from "./pages/auth/Logout";
-import Header from "./components/header/Header"; // Header 컴포넌트 경로
+import CommunityPage from "./pages/community/PostMain";
+import NewsPage from "./pages/news/ViewNews";
+import MyPage from "./pages/mypage/profile/MyPage";
+import UserUpdatePage from "./pages/mypage/profile/UserUpdate";
+import Header from "./components/header/Header";
+import MentoringPaymentPage from "./pages/payment/MentoringPayment";
+import MentorRequestPage from "./pages/mentor-request/MentorRequest";
+import ViewReviewPage from "./pages/mypage/review/ViewReview";
+import WriteReviewPage from "./pages/mypage/review/WriteReview";
+import MainNewsPage from "./pages/news/ViewMainNews";
+import MentoringPostSearchPage from "./pages/mentoring/MentoringPostSearch";
+import MentoringPostFormPage from "./pages/mentoring/MentoringPostForm";
+import MyPageHome from "./pages/mypage/MyPageHome";
+import UserSchedulePage from "./pages/mypage/schedule/UserSchedule";
+import DeleteUserPage from "./pages/mypage/delete-user/DeleteUser";
+import MentoringPostDetailPage from "./pages/mentoring/MentoringPostDetail";
+import MentoringReservationPage from "./pages/payment/MentoringReservation";
+import WritePostPage from "./pages/community/PostWrite";
+import AdminRoutes from "./pages/admin/mentor-request/AdminRoutes";
+import PasswordUpdate from "./pages/mypage/profile/PasswordUpdate";
 
-//로그인 상태에서만 /payment 경로에 접근 가능하도록 보호- 추후 분리 고려해보기
-// const PrivateRoute = ({ component: Component, ...rest }) => {
-//   const isAuthenticated = !!localStorage.getItem("jwtToken"); // 로그인 여부 확인
-//   return (
-//     <Route
-//       {...rest}
-//       render={(props) =>
-//         isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
-//       }
-//     />
-//   );
-// };
+// 로그인이 필요한 페이지를 위한 Private Route
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  const isAuthenticated = !!localStorage.getItem("jwtToken");
+  return (
+      <Route
+          {...rest}
+          render={(props) =>
+              isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
+          }
+      />
+  );
+};
 
 function App() {
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/login" component={LoginPage} />
-        <Route path="/logout" component={LogoutPage} />
-        <Route path="/payment" component={PaymentPage} />
-        <Route path="/signup" component={SignUpPage} />
-      </Switch>
-    </Router>
+      <Router>
+        <Header /> {/* 모든 페이지에 헤더 추가 */}
+        <Switch>
+          <Route path="/admin" component={AdminRoutes} />
+          <Route exact path="/" component={HomePage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/signup" component={SignUpPage} />
+          <Route path="/community" component={CommunityPage} />
+          <Route path="/news" component={NewsPage} />
+          <Route path="/mypage/payments/review/:paymentHistoryId" component={ViewReviewPage} />
+          <Route path="/mypage/payments/review" component={WriteReviewPage} />
+          <Route path="/main/news" component={MainNewsPage} />  {/* TODO: 나중에 삭제할 요소 */}
+          <Route path="/news" component={NewsPage} />
+          <Route path="/mypage/profile" component={MyPageHome} />
+          <PrivateRoute path="/writePost" component={WritePostPage} />
+
+          <PrivateRoute path="/mentoring/:mentoringPostId/mentoring-reservation" component={MentoringReservationPage} />
+          <Route path="/mentoring/:mentoringPostId" component={MentoringPostDetailPage} />
+          <Route path="/mentoring" component={MentoringPostSearchPage} />
+
+          <PrivateRoute path="/profile" component={MyPage} />
+          <PrivateRoute path="/user/update" component={UserUpdatePage} />
+          <PrivateRoute path="/user/mentor" component={MentorRequestPage} />
+          <PrivateRoute path="/payment" component={MentoringPaymentPage} />
+          <PrivateRoute path="/mentoring-post-form" component={MentoringPostFormPage} />
+          <Route path="/schedule" component={UserSchedulePage} />
+          <Route path="/delete-user" component={DeleteUserPage} />
+          <Route path="/password-update" component={PasswordUpdate} />
+        </Switch>
+      </Router>
   );
 }
 
