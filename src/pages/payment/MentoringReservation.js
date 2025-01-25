@@ -11,10 +11,18 @@ const MentoringReservation = () => {
   const [schedules, setSchedules] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
 
+  // Fetch JWT token from localStorage
+  const token = localStorage.getItem("jwtToken");
+
+  // 공고 데이터 가져오기
   useEffect(() => {
     const fetchMentoringPost = async () => {
       try {
-        const response = await axios.get(`/mentoring/${mentoringPostId}`);
+        const response = await axios.get(`/mentoring/${mentoringPostId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setMentoringPost(response.data.data);
       } catch (error) {
         console.error("공고 데이터 가져오기 오류:", error);
@@ -22,13 +30,19 @@ const MentoringReservation = () => {
     };
 
     fetchMentoringPost();
-  }, [mentoringPostId]);
+  }, [mentoringPostId, token]);
 
+  // 유효한 스케줄 조회
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
         const response = await axios.get(
-            `/mentoring/${mentoringPostId}/mentoring-schedule/empty-status`
+            `/mentoring/${mentoringPostId}/mentoring-schedule/empty-status`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
         );
         const data = response.data.data || [];
         setSchedules(data);
@@ -39,34 +53,58 @@ const MentoringReservation = () => {
     };
 
     fetchSchedules();
-  }, [mentoringPostId]);
+  }, [mentoringPostId, token]);
 
+  // 스케줄 선택
   const handleScheduleSelect = (schedule) => {
     setSelectedSchedule(schedule);
   };
 
+  // 스케줄 신청 및 결제 페이지로 이동
   const handleBookNow = async () => {
-    if (selectedSchedule) {
-      try {
-        const response = await axios.post("/mentoring/payments", {
-          mentoringScheduleId: selectedSchedule.id,
-          paymentCost: mentoringPost.price,
-          paymentCard: "신용카드",
-        });
-        const paymentId = response.data.data;
-        history.push(
-            `/payment?mentoringDate=${selectedSchedule.mentoringDate}&mentoringTime=${selectedSchedule.mentoringTime}&scheduleId=${selectedSchedule.id}&paymentId=${paymentId}`
-        );
-      } catch (error) {
-        console.error("결제 생성 중 오류:", error);
-        alert("결제 생성 중 문제가 발생했습니다.");
-      }
-    } else {
+    if (!selectedSchedule) {
       alert("스케줄을 선택해주세요.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+          "/mentoring/payments",
+          {
+            mentoringScheduleId: selectedSchedule.id,
+            paymentCost: mentoringPost.price,// 공고에서 전달받은 가격 사용
+            paymentCard: "신용카드",
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+      );
+
+      const paymentId = response.data.data;
+
+      // 결제 페이지로 이동 및 결제 정보 전달
+      history.push({
+        pathname: "/payment",
+        search: `?mentoringDate=${selectedSchedule.mentoringDate}&mentoringTime=${selectedSchedule.mentoringTime}&scheduleId=${selectedSchedule.id}&paymentId=${paymentId}`,
+        state: {
+          mentoringDate: selectedSchedule.mentoringDate, // 스케줄 날짜
+          mentoringTime: selectedSchedule.mentoringTime, // 스케줄 시간
+          scheduleId: selectedSchedule.id, // 스케줄 ID
+          paymentId: paymentId, // 결제 ID
+          price: mentoringPost.price, // 결제 금액
+        },
+      });
+    } catch (error) {
+      console.error("결제 생성 중 오류:", error);
+      alert("결제 생성 중 문제가 발생했습니다.");
     }
   };
 
-  if (!mentoringPost) return <div>Loading...</div>;
+  if (!mentoringPost) {
+    return <div>Loading...</div>;
+  }
 
   return (
       <div className="mentoring-container">
@@ -86,7 +124,7 @@ const MentoringReservation = () => {
           </div>
 
           <div className="mentoring-schedule">
-            <label className="mentoring-schedule-label">결제 가능한 스케쥴</label>
+            <label className="mentoring-schedule-label">결제 가능한 스케줄</label>
             <ul className="mentoring-schedule-list">
               {schedules.map((schedule) => (
                   <li
@@ -104,7 +142,7 @@ const MentoringReservation = () => {
 
           {selectedSchedule && (
               <button onClick={handleBookNow} className="mentoring-button">
-                결제하기
+                신청하기
               </button>
           )}
         </div>
