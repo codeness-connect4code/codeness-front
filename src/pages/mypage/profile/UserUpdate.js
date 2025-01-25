@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const UserUpdate = () => {
+  const history = useHistory();
   const [formData, setFormData] = useState({
     nickname: '',
     phoneNumber: '',
@@ -13,28 +15,26 @@ const UserUpdate = () => {
   const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem('jwtToken');
-        const response = await fetch('/users', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setFormData(prevState => ({
-          ...prevState,
-          ...data,
-          career: data.career?.toString() || ''
-        }));
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
     fetchUserData();
   }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem('jwtToken');
+      const response = await fetch('/users', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      setFormData(prevState => ({
+        ...prevState,
+        ...data,
+        career: data.career?.toString() || ''
+      }));
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,17 +60,11 @@ const UserUpdate = () => {
     try {
       const response = await fetch('/users', {
         method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
+        headers: { Authorization: `Bearer ${token}` },
         body: formDataToSend
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       alert('사용자 정보가 성공적으로 업데이트되었습니다.');
     } catch (error) {
       console.error('Error updating user:', error);
@@ -162,7 +156,12 @@ const UserUpdate = () => {
               accept="image/*"
           />
         </div>
-        <button type="submit">정보 수정</button>
+        <div>
+          <button type="button" onClick={() => history.push('/password-update')}>
+            비밀번호 변경
+          </button>
+          <button type="submit">정보 수정</button>
+        </div>
       </form>
   );
 };
