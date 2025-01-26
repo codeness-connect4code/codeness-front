@@ -6,6 +6,7 @@ import DeleteUser from "./delete-user/DeleteUser";
 import MentorRequestList from "./mentor-request/MentorRequestList";
 import { useHistory } from 'react-router-dom';
 import ChatLayout from './chat/ChatLayout';
+import MyMentoring from './my-mentoring/MyMentoring';
 
 
  const MyPageHome = () => {
@@ -17,9 +18,9 @@ import ChatLayout from './chat/ChatLayout';
    { id: 'chatting', label: '채팅 목록' },
    { id: 'mentoring', label: '일정 목록' },
    { id: 'records', label: '거래 내역' },
-   { id: 'reviews', label: '내 멘토링' },
+   { id: 'my-mentoring', label: '내 멘토링' },
    { id: 'history', label: '멘토 신청 내역' },
-   { id: 'withdraw', label: '탈퇴하기' }
+   { id: 'withdraw', label: '탈퇴하기' },
  ];
 
  return (
@@ -54,7 +55,7 @@ import ChatLayout from './chat/ChatLayout';
        {activeTab === 'profile' && <MyPage />}
        {activeTab === 'chatting' && <ChatLayout />}
        {activeTab === 'mentoring' && <UserSchedule/>}
-       {activeTab === 'records' && <div>일정 목록 컨텐츠</div>}
+       {activeTab === 'my-mentoring' && <MyMentoring />}
        {activeTab === 'withdraw' && <DeleteUser/>}
        {activeTab === 'history' && <MentorRequestList/>}
        {/* ... 다른 탭들의 컨텐츠 */}
