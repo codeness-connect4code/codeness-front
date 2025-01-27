@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {useParams, useHistory} from "react-router-dom";
 import axios from "axios";
 
 const PostDetailPage = () => {
-  const { postId } = useParams();
+  const {postId} = useParams();
   const history = useHistory();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
@@ -13,15 +13,29 @@ const PostDetailPage = () => {
   const [isAuthor, setIsAuthor] = useState(false);
   const [loading, setLoading] = useState(true);
   const [modalConfirm, setModalConfirm] = useState(null); // 모달의 확인 버튼 핸들러
+  const [commentsLoading, setCommentsLoading] = useState(false);
   const [commentId, setCommentId] = useState(null); // 수정 중인 댓글 ID
   const [editContent, setEditContent] = useState(""); // 수정 중인 댓글 내용
 
+  // Axios 기본 설정
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+    axios.defaults.baseURL = "http://localhost:8080";
+  }, []);
+
   // JWT 토큰 검증 및 디코딩 함수
   const validateToken = (token) => {
-    if (!token) return { isValid: false, userId: null };
+    if (!token) {
+      return {isValid: false, userId: null};
+    }
     try {
       const parts = token.split(".");
-      if (parts.length !== 3) return { isValid: false, userId: null };
+      if (parts.length !== 3) {
+        return {isValid: false, userId: null};
+      }
       const payload = JSON.parse(atob(parts[1]));
       return {
         isValid: !(payload.exp && payload.exp < Date.now() / 1000),
@@ -29,7 +43,7 @@ const PostDetailPage = () => {
       };
     } catch (error) {
       console.error("Token validation error:", error);
-      return { isValid: false, userId: null };
+      return {isValid: false, userId: null};
     }
   };
 
@@ -42,7 +56,7 @@ const PostDetailPage = () => {
       // JWT 토큰 검증 및 작성자 확인
       const token = localStorage.getItem("jwtToken");
       if (token) {
-        const { isValid, userId } = validateToken(token);
+        const {isValid, userId} = validateToken(token);
         if (isValid) {
           setIsAuthor(response.data.data.userId === userId); // 작성자 여부 확인
         }
@@ -57,10 +71,11 @@ const PostDetailPage = () => {
 
   // 댓글 목록 가져오기
   const fetchComments = async () => {
+    setCommentsLoading(true);
     try {
       const response = await axios.get(`/posts/${postId}/comments`);
       const token = localStorage.getItem("jwtToken");
-      const { isValid, userId } = validateToken(token);
+      const {isValid, userId} = validateToken(token);
 
       const updatedComments = response.data.data.content.map((comment) => ({
         ...comment,
@@ -70,6 +85,8 @@ const PostDetailPage = () => {
     } catch (error) {
       setModalMessage("댓글 데이터를 가져오는 중 오류가 발생했습니다.");
       setShowModal(true);
+    } finally {
+      setCommentsLoading(false);
     }
   };
 
@@ -96,8 +113,8 @@ const PostDetailPage = () => {
       const token = localStorage.getItem("jwtToken");
       await axios.patch(
           `/comments/${commentId}`, // 댓글 ID는 경로 변수로 전송
-          { content: editContent }, // 수정할 내용은 Body로 전송
-          { headers: { Authorization: `Bearer ${token}` } }
+          {content: editContent}, // 수정할 내용은 Body로 전송
+          {headers: {Authorization: `Bearer ${token}`}}
       );
 
       // 댓글 목록을 다시 가져오기
@@ -126,7 +143,7 @@ const PostDetailPage = () => {
       try {
         const token = localStorage.getItem("jwtToken");
         await axios.delete(`/comments/${commentId}`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {Authorization: `Bearer ${token}`},
         });
         setModalMessage("댓글이 삭제되었습니다.");
         setShowModal(true);
@@ -175,8 +192,8 @@ const PostDetailPage = () => {
       const token = localStorage.getItem("jwtToken");
       await axios.post(
           `/posts/${postId}/comments`,
-          { content: newComment },
-          { headers: { Authorization: `Bearer ${token}` } }
+          {content: newComment},
+          {headers: {Authorization: `Bearer ${token}`}}
       );
       setNewComment("");
       fetchComments();
@@ -199,7 +216,9 @@ const PostDetailPage = () => {
     fetchComments();
   }, [postId]);
 
-  if (loading) return <div>로딩 중...</div>;
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
       <div className="post-detail-page">
@@ -227,7 +246,9 @@ const PostDetailPage = () => {
 
         <div className="comments-section">
           <h2>댓글</h2>
-          {comments.length === 0 ? (
+          {commentsLoading ? (
+              <p>댓글을 불러오는 중입니다...</p>
+          ) : comments.length === 0 ? (
               <p>댓글이 없습니다.</p>
           ) : (
               comments.map((comment) => (
@@ -255,7 +276,8 @@ const PostDetailPage = () => {
                               onClick={() => handleEditComment(comment)}>수정
                           </button>
                           <button
-                              onClick={() => handleDeleteComment(comment.id)}>삭제
+                              onClick={() => handleDeleteComment(
+                                  comment.id)}>삭제
                           </button>
                         </div>
                     )}
