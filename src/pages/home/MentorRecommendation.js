@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import MentorBanner from './MentorBanner';
 import './Home.css';
@@ -8,6 +9,7 @@ const MentorRecommendation = () => {
   const [isVisible, setIsVisible] = useState(false);
   //토큰 가져오기
   const token = localStorage.getItem("jwtToken");
+  const history = useHistory();
 
   const fetchMentors = async () => {
     try {
@@ -23,6 +25,11 @@ const MentorRecommendation = () => {
   };
 
   const handleShowMore = () => {
+    //비로그인 추천 필터
+    if(!token){
+      alert("멘토링 추천은 로그인이 필요합니다.");
+      history.push('/login');
+    }
     setIsVisible(true);
     fetchMentors();
   };

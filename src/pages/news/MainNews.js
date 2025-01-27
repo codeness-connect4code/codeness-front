@@ -1,6 +1,7 @@
 // 뉴스 메인 페이지-> 메인 페이지에서 보여줄 몇개의 뉴스들
 // MainNewsSection.js
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import './News.css'
 
@@ -8,6 +9,7 @@ const MainNewsList = () => {
  const [news, setNews] = useState([]);
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState(null);
+ const history = useHistory();
  const newsUrl = 'http://localhost:8080/news?pageSize=5&pageNumber=0';
 
  useEffect(() => {
@@ -33,7 +35,9 @@ const MainNewsList = () => {
         width: "100%"
     }}
    >
-     <h2>최신 뉴스</h2>
+     <h2
+     style={{ cursor: 'pointer'}}
+     onClick={() => history.push('/news')}>최신 뉴스</h2>
      <div style={{
         width: "60%",
         border: "2px solid gray",

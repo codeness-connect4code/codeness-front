@@ -15,8 +15,8 @@
     text-align: center;
   }
 
-  span{
-    color: #FFD700;
+  #starRating{
+    color: #222;
   }
 
   .grid-item TrashButton{

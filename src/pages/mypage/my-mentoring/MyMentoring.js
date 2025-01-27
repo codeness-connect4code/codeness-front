@@ -91,7 +91,7 @@ useEffect(() => {
                         <p>분야: {item.field}</p>
                         <p>경력: {item.career}</p>
                         <p>닉네임: {item.userNickname}</p>
-                        <p>별점: <span>★</span> {item.starRating}</p>
+                        <p>별점: <span id='starRating'>★</span> {item.starRating}</p>
                     </div>
                 ))
             ) : (
