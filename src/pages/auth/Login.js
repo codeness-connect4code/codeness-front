@@ -34,7 +34,7 @@ const Login = () => {
         // Bearer 접두사 포함하여 axios 기본 헤더 설정
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         setMessage("로그인 성공!");
-        history.push("/payment");
+        history.push("/");
       } else {
         setMessage("로그인 실패: 토큰을 받지 못했습니다.");
       }

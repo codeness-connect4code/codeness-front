@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode'; // 수정된 부분: named import
 
 const UserUpdate = () => {
   const history = useHistory();
@@ -13,6 +14,8 @@ const UserUpdate = () => {
     siteLink: '',
   });
   const [profileImage, setProfileImage] = useState(null);
+  const [provider, setProvider] = useState(''); // provider 상태 추가
+  const [decodedToken, setDecodedToken] = useState(null); // decodedToken 상태 추가
 
   useEffect(() => {
     fetchUserData();
@@ -21,15 +24,24 @@ const UserUpdate = () => {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('jwtToken');
-      const response = await fetch('/users', {
-        headers: { Authorization: `Bearer ${token}` }
+      if (!token) throw new Error('토큰이 없습니다.');
+
+      // JWT 토큰을 디코딩하여 provider 값을 확인
+      const decoded = jwtDecode(token); // jwtDecode로 수정
+      setDecodedToken(decoded); // decodedToken 상태에 디코딩된 값 저장
+      setProvider(decoded.provider); // provider 값을 상태에 저장
+
+      // API 호출: 구글 유저와 로컬 유저에 따라 다른 엔드포인트 사용
+      const response = await fetch(decoded.provider === 'GOOGLE' ? '/google/users' : '/users', {
+        headers: { Authorization: `Bearer ${token}` },
       });
+
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
-      setFormData(prevState => ({
+      setFormData((prevState) => ({
         ...prevState,
         ...data,
-        career: data.career?.toString() || ''
+        career: data.career?.toString() || '', // 경력 데이터 처리
       }));
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -38,7 +50,7 @@ const UserUpdate = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
@@ -50,7 +62,7 @@ const UserUpdate = () => {
     const token = localStorage.getItem('jwtToken');
 
     const formDataToSend = new FormData();
-    Object.keys(formData).forEach(key => {
+    Object.keys(formData).forEach((key) => {
       formDataToSend.append(key, formData[key]);
     });
     if (profileImage) {
@@ -58,10 +70,10 @@ const UserUpdate = () => {
     }
 
     try {
-      const response = await fetch('/users', {
+      const response = await fetch(provider === 'GOOGLE' ? '/google/users' : '/users', {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${token}` },
-        body: formDataToSend
+        body: formDataToSend,
       });
 
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -74,6 +86,18 @@ const UserUpdate = () => {
 
   return (
       <form onSubmit={handleSubmit}>
+        {provider === 'GOOGLE' && (
+            <div>
+              <label htmlFor="name">이름:</label>
+              <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name || ''}
+                  onChange={handleChange}
+              />
+            </div>
+        )}
         <div>
           <label htmlFor="nickname">닉네임:</label>
           <input
@@ -114,7 +138,6 @@ const UserUpdate = () => {
           >
             <option value="FRONTEND">프론트엔드</option>
             <option value="BACKEND">백엔드</option>
-            <option value="FULLSTACK">풀스택</option>
           </select>
         </div>
         <div>
