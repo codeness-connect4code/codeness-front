@@ -24,6 +24,8 @@ import MentoringReservationPage from "./pages/payment/MentoringReservation";
 import WritePostPage from "./pages/community/PostWrite";
 import AdminRoutes from "./pages/admin/AdminRoutes";
 import PasswordUpdate from "./pages/mypage/profile/PasswordUpdate";
+import PaymentHistoryForMenteePage from "./pages/mypage/payment-history/PaymentHistoryForMentee";
+// import PaymentHistoryDetailPage from "./pages/mypage/payment-history/PaymentHistoryDetail";
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -68,6 +70,8 @@ function App() {
           <Route path="/schedule" component={UserSchedulePage} />
           <Route path="/delete-user" component={DeleteUserPage} />
           <Route path="/password-update" component={PasswordUpdate} />
+          {/*<Route path="/mypage/payment-history/detail/:paymentHistoryId" component={PaymentHistoryDetailPage} />*/}
+          <Route path="/mypage/payment-history" component={PaymentHistoryForMenteePage} />
         </Switch>
       </Router>
   );
