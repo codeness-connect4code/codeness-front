@@ -119,7 +119,8 @@ const MainNewsList = () => {
          </a>
          <span
          style={{
-            float:"right"
+            float:"right",
+            color: 'black'
          }}
          >{item.time}</span>
          </div>

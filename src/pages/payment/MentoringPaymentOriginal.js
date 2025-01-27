@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import axios from "axios";
 import "../../styles/payment/MentoringPayment.css";
@@ -7,58 +7,58 @@ const MentoringPayment = () => {
   const location = useLocation();
   const history = useHistory();
 
+  const token = localStorage.getItem("jwtToken"); // JWT 토큰 가져오기
   const [isLoading, setIsLoading] = useState(false);
+  const [impUid, setImpUid] = useState(null); // impUid를 상태로 관리
 
-  const params = new URLSearchParams(location.search);
-  const mentoringDate = params.get("mentoringDate");
-  const mentoringTime = params.get("mentoringTime");
-  const scheduleId = params.get("scheduleId");
-  const paymentId = params.get("paymentId");
+  const {
+    mentoringDate,
+    mentoringTime,
+    scheduleId,
+    paymentId,
+    price,
+  } = location.state || {};
 
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://cdn.iamport.kr/js/iamport.payment-1.2.0.js";
-    script.async = true;
-    script.onload = () => {
-      if (window.IMP) {
-        window.IMP.init("imp46707766");
-      }
-    };
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
-
-  const handlePayment = () => {
-    if (!scheduleId || !paymentId) {
+  const handlePayment = async () => {
+    if (!scheduleId || !price) {
       alert("결제 데이터를 찾을 수 없습니다.");
       return;
     }
 
     const IMP = window.IMP;
+    IMP.init("imp46707766"); // 아임포트 가맹점 식별코드
+
+    setIsLoading(true);
+
     const paymentData = {
       pg: "html5_inicis",
       pay_method: "card",
       merchant_uid: `order_${new Date().getTime()}`,
       name: `멘토링 스케줄 (${scheduleId})`,
-      amount: 1,
+      amount: price, // 전달된 가격 사용
       buyer_email: "test@test.com",
       buyer_name: "구매자이름",
-      buyer_tel: "010-1234-5678",
     };
 
     IMP.request_pay(paymentData, async (rsp) => {
       if (rsp.success) {
         try {
-          await axios.post(`/mentoring/payments/${paymentId}/verify`, {
-            mentoringScheduleId: scheduleId,
-            impUid: rsp.imp_uid,
-            pgTid: rsp.pg_tid,
-            paymentCost: rsp.paid_amount,
-            paymentCard: "신용카드",
-          });
+          setImpUid(rsp.imp_uid); // 성공 시 impUid 저장
+          await axios.post(
+              `/mentoring/payments/${paymentId}/verify`,
+              {
+                mentoringScheduleId: scheduleId,
+                impUid: rsp.imp_uid,
+                pgTid: rsp.pg_tid,
+                paymentCost: rsp.paid_amount,
+                paymentCard: "신용카드",
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+                },
+              }
+          );
           alert("결제가 완료되었습니다!");
           history.push("/mentoring/success");
         } catch (error) {
@@ -66,29 +66,61 @@ const MentoringPayment = () => {
           alert("결제 검증 중 문제가 발생했습니다.");
         }
       } else {
+        setImpUid(rsp.imp_uid); // 실패 시에도 impUid 저장
         alert(`결제가 실패하였습니다: ${rsp.error_msg}`);
-        try {
-          await axios.delete(`/mentoring/payments/${paymentId}`, {
-            data: { impUid: rsp.imp_uid },
-          });
-          alert("결제 실패로 인해 삭제되었습니다.");
-        } catch (error) {
-          console.error("결제 삭제 중 오류:", error);
-          alert("결제 삭제 중 문제가 발생했습니다.");
-        }
       }
+      setIsLoading(false);
     });
+  };
+
+  // 뒤로가기 버튼 클릭 시 결제 삭제
+  const handleBack = async () => {
+    try {
+      setIsLoading(true);
+      if (!impUid) {
+        alert("impUid가 없어 결제를 취소할 수 없습니다.");
+        return;
+      }
+      await axios.delete(`/mentoring/payments/${paymentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          impUid, // 저장된 impUid 전달
+        },
+      });
+      alert("결제가 취소되었습니다.");
+    } catch (error) {
+      console.error("결제 삭제 중 오류:", error);
+      alert("결제를 취소하는 중 문제가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
+      history.goBack(); // 이전 페이지로 이동
+    }
   };
 
   return (
       <div className="payment-page">
         <h1>Mentoring Payment</h1>
         <div className="payment-details">
-          <p><strong>Schedule:</strong> {mentoringDate} {mentoringTime}</p>
-          <button className="pay-button" onClick={handlePayment} disabled={isLoading}>
+          <p>스케줄 ID: {scheduleId}</p>
+          <p>스케줄 날짜: {mentoringDate}</p>
+          <p>스케줄 시간: {mentoringTime}</p>
+          <p>결제 금액: {price}원</p>
+          <button
+              className="pay-button"
+              onClick={handlePayment}
+              disabled={isLoading}
+          >
             {isLoading ? "결제 진행 중..." : "결제하기"}
           </button>
-          <button className="back-button" onClick={() => history.goBack()}>뒤로가기</button>
+          <button
+              className="back-button"
+              onClick={handleBack}
+              disabled={isLoading}
+          >
+            뒤로가기
+          </button>
         </div>
       </div>
   );
