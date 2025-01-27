@@ -95,7 +95,7 @@ const CommunityPage = () => {
   };
 
   const goToPostDetail = (postId) => {
-    history.push(`/post/${postId}`); // postId를 포함하여 상세 페이지로 이동
+    history.push(`/posts/${postId}`); // postId를 포함하여 상세 페이지로 이동
   };
 
   return (
