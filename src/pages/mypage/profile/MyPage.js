@@ -52,7 +52,6 @@ const MyPage = () => {
           <p>경력: {userData.career}년</p>
           <p>MBTI: {userData.mbti}</p>
           <p>사이트 링크: <a href={userData.siteLink}>{userData.siteLink}</a></p>
-          <p>자기소개: {userData.selfIntroduction}</p>
         </div>
 
         <div className="update-button-container">
