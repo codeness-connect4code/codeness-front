@@ -27,6 +27,7 @@ import AdminRoutes from "./pages/admin/AdminRoutes";
 import PasswordUpdate from "./pages/mypage/profile/PasswordUpdate";
 import PaymentHistoryForMenteePage from "./pages/mypage/payment-history/PaymentHistoryForMentee";
 // import PaymentHistoryDetailPage from "./pages/mypage/payment-history/PaymentHistoryDetail";
+import PostUpdatePage from "./pages/community/PostUpdate";
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -55,10 +56,10 @@ function App() {
           <Route path="/mypage/payments/review/:paymentHistoryId" component={ViewReviewPage} />
           <Route path="/mypage/payments/review" component={WriteReviewPage} />
           <Route path="/main/news" component={MainNewsPage} />  {/* TODO: 나중에 삭제할 요소 */}
-          <Route path="/news" component={NewsPage} />
           <Route path="/mypage/profile" component={MyPageHome} />
           <PrivateRoute path="/writePost" component={WritePostPage} />
-          <Route path="/post/:postId" component={PostDetailPage} />
+          <Route path="/posts/:postId/update" component={PostUpdatePage} />
+          <Route exact path="/posts/:postId" component={PostDetailPage} />
 
           <PrivateRoute path="/mentoring/:mentoringPostId/mentoring-reservation" component={MentoringReservationPage} />
           <Route path="/mentoring/:mentoringPostId" component={MentoringPostDetailPage} />
