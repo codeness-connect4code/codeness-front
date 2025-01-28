@@ -177,7 +177,7 @@ const PostDetailPage = () => {
 
   // 게시글 수정
   const handleEdit = () => {
-    history.push(`/posts/edit/${postId}`);
+    history.push(`/posts/${postId}/update`);
   };
 
   // 댓글 등록
@@ -213,7 +213,11 @@ const PostDetailPage = () => {
 
   useEffect(() => {
     fetchPostDetails();
-    fetchComments();
+
+    // 댓글 데이터는 게시글 수정 페이지가 아닌 경우에만 가져오기
+    if (window.location.pathname === `/posts/${postId}`) {
+      fetchComments();
+    }
   }, [postId]);
 
   if (loading) {

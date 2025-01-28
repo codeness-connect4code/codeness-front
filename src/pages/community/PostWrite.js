@@ -192,11 +192,13 @@ const WritePostPage = () => {
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            flex: 1; /* 기본 flex 값 */
           }
 
           .submit-button {
             background-color: #007bff;
             color: white;
+            flex: 5; /* 등록하기 버튼의 너비를 10% 줄임 */
           }
 
           .submit-button:hover {
@@ -206,6 +208,7 @@ const WritePostPage = () => {
           .cancel-button {
             background-color: #6c757d;
             color: white;
+            flex: 1.1; /* 취소하기 버튼의 너비를 10% 늘림 */
           }
 
           .cancel-button:hover {
