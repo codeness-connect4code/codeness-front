@@ -26,8 +26,9 @@ import PostDetailPage from "./pages/community/PostDetail"
 import AdminRoutes from "./pages/admin/AdminRoutes";
 import PasswordUpdate from "./pages/mypage/profile/PasswordUpdate";
 import PaymentHistoryForMenteePage from "./pages/mypage/payment-history/PaymentHistoryForMentee";
-// import PaymentHistoryDetailPage from "./pages/mypage/payment-history/PaymentHistoryDetail";
+import PaymentHistoryDetailPage from "./pages/mypage/payment-history/PaymentHistoryDetail";
 import PostUpdatePage from "./pages/community/PostUpdate";
+import MentoringPaymentSuccessPage from "./pages/payment/MentoringPaymentSuccess";
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -61,6 +62,7 @@ function App() {
           <Route path="/posts/:postId/update" component={PostUpdatePage} />
           <Route exact path="/posts/:postId" component={PostDetailPage} />
 
+          <Route path="/mentoring/success" component={MentoringPaymentSuccessPage} />
           <PrivateRoute path="/mentoring/:mentoringPostId/mentoring-reservation" component={MentoringReservationPage} />
           <Route path="/mentoring/:mentoringPostId" component={MentoringPostDetailPage} />
           <Route path="/mentoring" component={MentoringPostSearchPage} />
@@ -73,7 +75,7 @@ function App() {
           <Route path="/schedule" component={UserSchedulePage} />
           <Route path="/delete-user" component={DeleteUserPage} />
           <Route path="/password-update" component={PasswordUpdate} />
-          {/*<Route path="/mypage/payment-history/detail/:paymentHistoryId" component={PaymentHistoryDetailPage} />*/}
+          <Route path="/mypage/payment-history/detail/:paymentHistoryId" component={PaymentHistoryDetailPage} />
           <Route path="/mypage/payment-history" component={PaymentHistoryForMenteePage} />
         </Switch>
       </Router>
