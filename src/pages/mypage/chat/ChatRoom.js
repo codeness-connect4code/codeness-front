@@ -1,13 +1,24 @@
 // src/pages/chat/ChatRoom.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ChatRoomList from './ChatRoomList';
+import { database } from '../../../firebaseConfig';
+import { ref, set, onChildAdded, onChildChanged ,off } from 'firebase/database';
+import { jwtDecode } from 'jwt-decode';
 
 const ChatRoom = ({ chatRoomId, partnerId, profileImage}) => {
     const [messages, setMessages] = useState([]);
     const token = localStorage.getItem("jwtToken");
+    const userId = jwtDecode(token).userId;
     // 새로운 상태 추가
     const [newMessage, setNewMessage] = useState('');
+    const [initialTimestamp, setInitialTimestamp] = useState(null); // 추가
+
+
+    // 새로운 함수: unreadCount를 0으로 업데이트
+    const updateUnreadCount = async () => {
+      const myUnreadCountRef = ref(database, `chatRooms/${userId}/${chatRoomId}/unreadCount`);
+      await set(myUnreadCountRef, 0);
+      };
 
     // 메시지 전송 함수 추가
     const sendMessage = async () => {
@@ -19,11 +30,6 @@ const ChatRoom = ({ chatRoomId, partnerId, profileImage}) => {
             headers: { "Authorization": `Bearer ${token}` }
         });
         setNewMessage('');
-        // 메시지 전송 후 목록 새로고침
-        const response = await axios.get(`http://localhost:8080/chat-rooms/${chatRoomId}`, {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-        setMessages(response.data.data);
         } catch (error) {
         console.error('메시지 전송 실패:', error);
         }
@@ -36,12 +42,54 @@ const ChatRoom = ({ chatRoomId, partnerId, profileImage}) => {
             headers: { "Authorization": `Bearer ${token}` }
         });
         setMessages(response.data.data);
+        
+        await updateUnreadCount();
+
+         // 가장 최근 메시지의 timestamp를 기준으로 설정
+         const latestMessage = response.data.data[response.data.data.length - 1];
+         setInitialTimestamp(latestMessage ? latestMessage.timestamp : "0");
+
+        // 기존 메시지를 가져온 후 Firebase 리스너 설정
+        const messagesRef = ref(database, `chatMessages/${chatRoomId}`);
+
+        //이 채팅방에서 메시지가 오면 무조건 읽은 것으로 처리
+        onChildAdded(messagesRef, async (snapshot) => {
+            const newMessage = snapshot.val();
+            // initialTimestamp가 설정된 후에만 새 메시지 추가
+            if (newMessage.timestamp > initialTimestamp) {
+              await updateUnreadCount();
+                setMessages(prevMessages => {
+                    // 중복 체크
+                    const isDuplicate = prevMessages.some(msg => 
+                        msg.timestamp === newMessage.timestamp && 
+                        msg.content === newMessage.content
+                    );
+                    if (!isDuplicate) {
+                        return [...prevMessages, {
+                            content: newMessage.content,
+                            senderId: newMessage.senderId,
+                            timestamp: newMessage.timestamp
+                        }];
+                    }
+                    return prevMessages;
+                });
+            }
+        });
+       
+
         } catch (error) {
         console.error('메시지 조회 실패:', error);
         }
     };
    fetchMessages();
- }, [chatRoomId]);
+
+   // 컴포넌트 언마운트시 리스너 제거
+   return () => {
+    const messagesRef = ref(database, `chatMessages/${chatRoomId}`);
+    off(messagesRef);
+    updateUnreadCount();
+};
+ }, [chatRoomId,token,initialTimestamp]);
 
  return (
   <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
