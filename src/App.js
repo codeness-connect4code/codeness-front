@@ -22,10 +22,13 @@ import DeleteUserPage from "./pages/mypage/delete-user/DeleteUser";
 import MentoringPostDetailPage from "./pages/mentoring/MentoringPostDetail";
 import MentoringReservationPage from "./pages/payment/MentoringReservation";
 import WritePostPage from "./pages/community/PostWrite";
+import PostDetailPage from "./pages/community/PostDetail"
 import AdminRoutes from "./pages/admin/AdminRoutes";
 import PasswordUpdate from "./pages/mypage/profile/PasswordUpdate";
 import PaymentHistoryForMenteePage from "./pages/mypage/payment-history/PaymentHistoryForMentee";
-// import PaymentHistoryDetailPage from "./pages/mypage/payment-history/PaymentHistoryDetail";
+import PaymentHistoryDetailPage from "./pages/mypage/payment-history/PaymentHistoryDetail";
+import PostUpdatePage from "./pages/community/PostUpdate";
+import MentoringPaymentSuccessPage from "./pages/payment/MentoringPaymentSuccess";
 
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -54,10 +57,12 @@ function App() {
           <Route path="/mypage/payments/review/:paymentHistoryId" component={ViewReviewPage} />
           <Route path="/mypage/payments/review" component={WriteReviewPage} />
           <Route path="/main/news" component={MainNewsPage} />  {/* TODO: 나중에 삭제할 요소 */}
-          <Route path="/news" component={NewsPage} />
           <Route path="/mypage/profile" component={MyPageHome} />
           <PrivateRoute path="/writePost" component={WritePostPage} />
+          <Route path="/posts/:postId/update" component={PostUpdatePage} />
+          <Route exact path="/posts/:postId" component={PostDetailPage} />
 
+          <Route path="/mentoring/success" component={MentoringPaymentSuccessPage} />
           <PrivateRoute path="/mentoring/:mentoringPostId/mentoring-reservation" component={MentoringReservationPage} />
           <Route path="/mentoring/:mentoringPostId" component={MentoringPostDetailPage} />
           <Route path="/mentoring" component={MentoringPostSearchPage} />
@@ -70,7 +75,7 @@ function App() {
           <Route path="/schedule" component={UserSchedulePage} />
           <Route path="/delete-user" component={DeleteUserPage} />
           <Route path="/password-update" component={PasswordUpdate} />
-          {/*<Route path="/mypage/payment-history/detail/:paymentHistoryId" component={PaymentHistoryDetailPage} />*/}
+          <Route path="/mypage/payment-history/detail/:paymentHistoryId" component={PaymentHistoryDetailPage} />
           <Route path="/mypage/payment-history" component={PaymentHistoryForMenteePage} />
         </Switch>
       </Router>

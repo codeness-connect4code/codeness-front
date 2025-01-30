@@ -9,7 +9,6 @@ const MentoringPayment = () => {
 
   const token = localStorage.getItem("jwtToken"); // JWT 토큰 가져오기
   const [isLoading, setIsLoading] = useState(false);
-  const [impUid, setImpUid] = useState(null); // impUid 상태 관리
 
   // 전달된 state에서 데이터 가져오기
   const {
@@ -44,7 +43,6 @@ const MentoringPayment = () => {
     IMP.request_pay(paymentData, async (rsp) => {
       if (rsp.success) {
         try {
-          setImpUid(rsp.imp_uid); // impUid 저장
           await axios.post(
               `/mentoring/payments/${paymentId}/verify`,
               {
@@ -68,29 +66,55 @@ const MentoringPayment = () => {
         }
       } else {
         alert(`결제가 실패하였습니다: ${rsp.error_msg}`);
+        try {
+          await handleRejectPayment(rsp.imp_uid); // 실패 시 결제 거절 API 호출
+        } catch (error) {
+          console.error("결제 거절 처리 중 오류:", error);
+        }
       }
       setIsLoading(false);
     });
   };
 
-  // 뒤로가기 버튼 클릭 시 결제 삭제
-  const handleBack = async () => {
+  // 결제 거절 처리 API 호출
+  const handleRejectPayment = async (impUid) => {
+    if (!paymentId || !impUid) {
+      alert("결제 정보를 찾을 수 없습니다.");
+      return;
+    }
+
+    await axios.delete(`/mentoring/payments/${paymentId}/rejection`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        impUid, // 결제 실패 시 받은 impUid 전달
+      },
+    });
+    alert("결제 거절로 인해 데이터가 삭제되었습니다.");
+  };
+
+  // 결제 데이터 삭제 요청
+  const handleDeletePayment = async () => {
     if (!paymentId) {
       alert("결제 정보를 찾을 수 없습니다.");
       return;
     }
 
+    await axios.delete(`/mentoring/payments/${paymentId}/cancel`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {}, // 추가 데이터가 필요 없는 경우 빈 객체 전달
+    });
+    alert("결제가 취소되었습니다.");
+  };
+
+  // 뒤로가기 버튼 클릭 시 결제 삭제
+  const handleBack = async () => {
     try {
       setIsLoading(true);
-      await axios.delete(`/mentoring/payments/${paymentId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        data: {
-          impUid: impUid || "", // 저장된 impUid 전달
-        },
-      });
-      alert("결제가 취소되었습니다.");
+      await handleDeletePayment(); // 결제 데이터 삭제 요청
     } catch (error) {
       console.error("결제 삭제 중 오류:", error);
       alert("결제를 취소하는 중 문제가 발생했습니다.");

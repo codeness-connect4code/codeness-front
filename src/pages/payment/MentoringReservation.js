@@ -84,6 +84,15 @@ const MentoringReservation = () => {
 
       const paymentId = response.data.data;
 
+      console.log("MentoringReservation - Pushing to /payment", {
+        mentoringDate: selectedSchedule.mentoringDate,
+        mentoringTime: selectedSchedule.mentoringTime,
+        scheduleId: selectedSchedule.id,
+        paymentId: paymentId,
+        price: mentoringPost.price,
+        userNickname: mentoringPost?.userNickname,
+      });
+
       // 결제 페이지로 이동 및 결제 정보 전달
       history.push({
         pathname: "/payment",
@@ -94,6 +103,7 @@ const MentoringReservation = () => {
           scheduleId: selectedSchedule.id, // 스케줄 ID
           paymentId: paymentId, // 결제 ID
           price: mentoringPost.price, // 결제 금액
+          userNickname: mentoringPost?.userNickname, // 멘토 닉네임 추가
         },
       });
     } catch (error) {
@@ -112,12 +122,13 @@ const MentoringReservation = () => {
           <h2 className="mentoring-card-title">{mentoringPost?.title}</h2>
           <div className="mentoring-profile">
             <img
-                src={mentoringPost?.mentorProfilePicture}
+                src={mentoringPost?.mentorProfilePicture
+                    || "/default-profile.png"}
                 alt="Mentor Profile"
                 className="mentoring-profile-img"
             />
             <div className="mentoring-profile-details">
-              <p className="mentor-name">{mentoringPost?.mentorNickname}</p>
+              <p className="mentor-name">{mentoringPost?.userNickname}</p>
               <p>{mentoringPost?.company}</p>
               <p>가격 : {mentoringPost?.price}원</p>
             </div>
@@ -125,6 +136,10 @@ const MentoringReservation = () => {
 
           <div className="mentoring-schedule">
             <label className="mentoring-schedule-label">결제 가능한 스케줄</label>
+            {/* 스케줄이 없을 경우 메시지 표시 */}
+            {!schedules.length && (
+                <p className="no-schedules">현재 예약 가능한 스케줄이 없습니다.</p>
+            )}
             <ul className="mentoring-schedule-list">
               {schedules.map((schedule) => (
                   <li

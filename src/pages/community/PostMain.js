@@ -94,6 +94,10 @@ const CommunityPage = () => {
     history.push("/writePost");
   };
 
+  const goToPostDetail = (postId) => {
+    history.push(`/posts/${postId}`); // postId를 포함하여 상세 페이지로 이동
+  };
+
   return (
       <div className="community-page">
         <div className="main-content">
@@ -157,7 +161,12 @@ const CommunityPage = () => {
               ) : (
                   posts.map((post) => (
                       <tr key={post.id}>
-                        <td>{post.title}</td>
+                        <td
+                            className="clickable-title"
+                            onClick={() => goToPostDetail(post.id)}
+                        >
+                          {post.title}
+                        </td>
                         <td>{post.writer}</td>
                         <td>{post.view}</td>
                         <td>{new Date(post.createdAt).toLocaleDateString()}</td>
@@ -284,6 +293,28 @@ const CommunityPage = () => {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: left;
+          }
+
+          .page-button {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #007bff !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 10px !important;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+          }
+
+          .clickable-title {
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.3s;
+          }
+
+          .clickable-title:hover {
+            color: #0056b3;
           }
 
           .page-button {
