@@ -9,7 +9,7 @@ import MainPosts from './MainPosts';
 function Home() {
   const history = useHistory();
   const location = useLocation();
-
+  
   useEffect(() => {
     // URL에서 토큰 파라미터 확인 (소셜 로그인 리다이렉트)
     const params = new URLSearchParams(location.search);

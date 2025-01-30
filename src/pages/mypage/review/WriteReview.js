@@ -9,16 +9,25 @@ function WriteReview(){
     const [mentorInfo, setMentorInfo] = useState(null); //멘토 프로필 주소, 멘토 닉네임, 멘토 공고 제목
     const [rating, setRating] = useState(0);
     const stars = [1, 2, 3, 4, 5];
-    //
-    // useEffect(() =>{
-    //     fetchMentorInfo();
-    // })
+
+     //토큰 가져오기
+     const token = localStorage.getItem("jwtToken");
+
+    //거래내역에서 후기 작성 누르면 받아올 데이터
+    const response = {
+        data: {
+            profileUrl : "https://codeness.s3.ap-northeast-1.amazonaws.com/Profile/1-Profile.png",
+            mentorNick : "김멘토1",
+            mentoringPost : "[한달 안에 파이썬 부시기]",
+            mentoringPostId : 1,
+            paymentHistoryId : 1,
+        }
+    }
+
     const handleStarClick = (value) => {
         setRating(value);
     }
 
-    //토큰 가져오기
-    const token = localStorage.getItem("jwtToken");
 
     //후기 작성 버튼 누르면 서버에 요청
     const handleSubmit = async (e) => {
@@ -42,16 +51,7 @@ function WriteReview(){
         }
     }
 
-    //거래내역에서 후기 작성 누르면 받아올 데이터
-    const response = {
-            data: {
-                profileUrl : "https://codeness.s3.ap-northeast-1.amazonaws.com/Profile/1-Profile.png",
-                mentorNick : "김멘토1",
-                mentoringPost : "[한달 안에 파이썬 부시기]",
-                mentoringPostId : 1,
-                paymentHistoryId : 1,
-            }
-        }
+    
        
     
     
