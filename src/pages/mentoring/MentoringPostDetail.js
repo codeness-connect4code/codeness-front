@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom"; // useHistory 추가
+import React, {useState, useEffect} from "react";
+import {useParams, useHistory} from "react-router-dom"; // useHistory 추가
 import axios from "axios";
 import Pagination from "../../components/Pagenation";
 import "../../styles/mentoring/MentoringPostDetail.css";
 
 const MentoringPostDetail = () => {
-  const { mentoringPostId } = useParams(); // URL 파라미터에서 mentoringPostId 가져오기
+  const {mentoringPostId} = useParams(); // URL 파라미터에서 mentoringPostId 가져오기
   const [mentoringPost, setMentoringPost] = useState(null); // 공고 상세 데이터
   const [reviews, setReviews] = useState([]); // 리뷰 데이터
   const [currentPage, setCurrentPage] = useState(1); // 현재 리뷰 페이지
@@ -30,7 +30,8 @@ const MentoringPostDetail = () => {
 
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(`/mentoring/${mentoringPostId}/reviews`);
+        const response = await axios.get(
+            `/mentoring/${mentoringPostId}/reviews`);
         setReviews(response.data.data.content);
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -46,7 +47,9 @@ const MentoringPostDetail = () => {
     history.push(`/mentoring/${mentoringPostId}/mentoring-reservation`);
   };
 
-  if (!mentoringPost) return <div>Loading...</div>;
+  if (!mentoringPost) {
+    return <div>Loading...</div>;
+  }
 
   return (
       <div className="mentoring-page">
@@ -58,7 +61,7 @@ const MentoringPostDetail = () => {
               className="mentor-image"
           />
           <div className="mentor-details">
-            <h2>{mentoringPost.mentorNickname}</h2>
+            <h2>{mentoringPost.userNickname}</h2>
             <h1>{mentoringPost.title}</h1>
             <span className="post-data">{mentoringPost.company}</span>
             <span className="post-data"><strong>Field:</strong> {mentoringPost.field}</span>

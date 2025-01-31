@@ -37,7 +37,7 @@ const CommunityPage = () => {
     if (isFetching.current) return; // 요청 중이라면 실행하지 않음
     isFetching.current = true;
     try {
-      const response = await axios.get("/posts", { params });
+      const response = await axios.get("/posts?postType=NOTICE", { params });
       setPosts(response.data.data.content || []);
       setTotalPages(response.data.data.totalPages || 1);
       setCurrentPage(params.pageNumber + 1); // 백엔드의 pageNumber(0-based)를 1-based로 변환
@@ -94,25 +94,9 @@ const CommunityPage = () => {
     history.push("/writePost");
   };
 
-  const goToPostDetail = (postId) => {
-    history.push(`/posts/${postId}`); // postId를 포함하여 상세 페이지로 이동
-  };
-
   return (
       <div className="community-page">
         <div className="main-content">
-          {/* 사이드바 */}
-          <aside className="sidebar">
-            {["전체", "질문 게시판", "자유 게시판", "공지사항"].map((tab) => (
-                <button
-                    key={tab}
-                    className={`tab-button ${currentTab === tab ? "active" : ""}`}
-                    onClick={() => handleTabChange(tab)}
-                >
-                  {tab}
-                </button>
-            ))}
-          </aside>
 
           {/* 콘텐츠 영역 */}
           <section className="content">
@@ -161,12 +145,7 @@ const CommunityPage = () => {
               ) : (
                   posts.map((post) => (
                       <tr key={post.id}>
-                        <td
-                            className="clickable-title"
-                            onClick={() => goToPostDetail(post.id)}
-                        >
-                          {post.title}
-                        </td>
+                        <td>{post.title}</td>
                         <td>{post.writer}</td>
                         <td>{post.view}</td>
                         <td>{new Date(post.createdAt).toLocaleDateString()}</td>
@@ -293,28 +272,6 @@ const CommunityPage = () => {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: left;
-          }
-
-          .page-button {
-            padding: 10px 15px;
-            margin: 0 5px;
-            background-color: #007bff !important;
-            color: white !important;
-            border: none !important;
-            border-radius: 10px !important;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-          }
-
-          .clickable-title {
-            cursor: pointer;
-            text-decoration: none;
-            transition: color 0.3s;
-          }
-
-          .clickable-title:hover {
-            color: #0056b3;
           }
 
           .page-button {

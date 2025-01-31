@@ -4,7 +4,53 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6f0b83ef-2fb8-4b13-84f7-b137b73fe48f" name="변경" comment="" />
+    <list default="true" id="6f0b83ef-2fb8-4b13-84f7-b137b73fe48f" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/src/firebaseConfig.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/admin/mentor-list/MentorDetail.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/admin/mentor-list/MentorList.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/community/CommunityNotice.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/community/PostDetail.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/community/PostUpdate.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/home/CompanyInfo.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/home/MainPosts.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/mypage/my-mentoring/MyMentoring.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/mypage/my-mentoring/MyMentoring.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/mypage/payment-history/PaymentHistoryDetail.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/mypage/payment-history/PaymentHistoryForMentee.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/payment/MentoringPaymentSuccess.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/styles/admin/MentorDetail.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/styles/admin/MentorList.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/styles/mypage/mentor-request/MentorRequest.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/styles/payment/MentoringPaymentSuccess.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/admin/mentor-request/AdminLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/admin/AdminLayout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/admin/mentor-request/AdminRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/admin/AdminRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/auth/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/auth/Login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/community/CommunityMain.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/community/PostMain.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/community/PostMain.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/community/PostWrite.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/community/PostWrite.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/home/Home.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/home/Home.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/home/Home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/home/MentorRecommendation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/home/MentorRecommendation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mentor-request/MentorRequest.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mentor-request/MentorRequest.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mentoring/MentoringPostDetail.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mentoring/MentoringPostDetail.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mypage/MyPageHome.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mypage/MyPageHome.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mypage/chat/ChatLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mypage/chat/ChatLayout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mypage/chat/ChatRoom.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mypage/chat/ChatRoom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mypage/chat/ChatRoomList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mypage/chat/ChatRoomList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mypage/profile/MyPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mypage/profile/MyPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mypage/profile/UserUpdate.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mypage/profile/UserUpdate.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mypage/review/WriteReview.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mypage/review/WriteReview.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/news/ViewMainNews.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/news/MainNews.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/news/ViewNews.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/news/ViewNews.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/payment/MentoringPayment.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/payment/MentoringPayment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/payment/MentoringPaymentOriginal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/payment/MentoringPaymentOriginal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/payment/MentoringReservation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/payment/MentoringReservation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/mypage/profile/PasswordUpdate.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/mypage/profile/PasswordUpdate.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,9 +66,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2rybT1WWoU7CbqjMtHze5dxFdiy" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -31,7 +77,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "develop",
+    "git-widget-placeholder": "feature/jwt-fix",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/park-yejin/Desktop/sparta/Spring_pj/codeness-front",
     "node.js.detected.package.eslint": "true",
