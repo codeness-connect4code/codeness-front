@@ -58,6 +58,7 @@ function App() {
           <Route path="/mypage/payments/review" component={WriteReviewPage} />
           <Route path="/main/news" component={MainNewsPage} />  {/* TODO: 나중에 삭제할 요소 */}
           <Route path="/mypage/profile" component={MyPageHome} />
+          <Route path="/mypage" component={MyPageHome} />
           <PrivateRoute path="/writePost" component={WritePostPage} />
           <Route path="/posts/:postId/update" component={PostUpdatePage} />
           <Route exact path="/posts/:postId" component={PostDetailPage} />
