@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6f0b83ef-2fb8-4b13-84f7-b137b73fe48f" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/src/api/axios.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/constants.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/home/Home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mypage/MyPageHome.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mypage/MyPageHome.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mypage/payment-history/PaymentHistoryForMentee.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mypage/payment-history/PaymentHistoryForMentee.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/mypage/review/ViewReview.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mypage/review/ViewReview.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/mypage/review/WriteReview.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mypage/review/WriteReview.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/payment/MentoringPaymentSuccess.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/payment/MentoringPaymentSuccess.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,8 +40,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Node.js.MentoringPaymentSuccess.js.executor": "Run",
+    "Node.js.WriteReview.js.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feature/jwt-fix",
+    "git-widget-placeholder": "Merging feature/jwt-fix",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/park-yejin/Desktop/sparta/Spring_pj/codeness-front",
     "node.js.detected.package.eslint": "true",
