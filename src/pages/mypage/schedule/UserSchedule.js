@@ -8,49 +8,13 @@ const UserSchedule = () => {
   const [events, setEvents] = useState([]);
   const [error, setError] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(moment());
-  const [userProvider, setUserProvider] = useState(null);
   const history = useHistory();
 
   const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
 
   useEffect(() => {
-    checkUserProvider();
-  }, []);
-
-  useEffect(() => {
-    if (userProvider === 'LOCAL') {
-      // LOCAL 유저라면 소셜 로그인 유도
-      setError('소셜 로그인을 해주세요.');
-    } else if (userProvider) {
-      fetchEvents();
-    }
-  }, [currentMonth, userProvider]);
-
-  const checkUserProvider = async () => {
-    const token = localStorage.getItem('jwtToken');
-    if (!token) {
-      history.push('/login');
-      return;
-    }
-
-    try {
-      const response = await axios.get('http://localhost:8080/users/provider', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      if (response.data?.data) {
-        setUserProvider(response.data.data);
-      }
-    } catch (error) {
-      if (error.response?.status === 401) {
-        history.push('/login');
-      } else {
-        setError('구글 소셜 로그인이 필요한 서비스입니다.');
-      }
-    }
-  };
+    fetchEvents();
+  }, [currentMonth]);
 
   const fetchEvents = async () => {
     const token = localStorage.getItem('jwtToken');
@@ -75,10 +39,11 @@ const UserSchedule = () => {
 
       if (response.data?.data) {
         setEvents(response.data.data);
+        setError(null);
       }
     } catch (error) {
       if (error.response?.status === 401) {
-        history.push('/login');
+        setError('소셜 로그인이 필요한 서비스입니다.');
       } else {
         setError('일정을 불러오는데 실패했습니다.');
       }
@@ -102,28 +67,14 @@ const UserSchedule = () => {
     return days;
   };
 
-  const handleLogin = () => {
-    history.push('/login');
-  };
-
   return (
       <div className="calendar-container">
-        {/* 사용자 정보 로드 실패 또는 LOCAL 사용자인 경우의 에러 처리 */}
-        {error && (
+        {error === '소셜 로그인이 필요한 서비스입니다.' ? (
             <div className="error-container">
               <p>{error}</p>
-              <button onClick={handleLogin}>로그인 페이지로 이동</button>
+              <button className="small-btn" onClick={() => history.push('/login')}>로그인</button>
             </div>
-        )}
-
-        {userProvider === 'LOCAL' && (
-            <div className="social-login-prompt">
-              <p>소셜 로그인을 해주세요.</p>
-              <button onClick={handleLogin}>로그인하기</button>
-            </div>
-        )}
-
-        {userProvider && userProvider !== 'LOCAL' && (
+        ) : (
             <>
               <div className="calendar-header">
                 <div className="calendar-controls">

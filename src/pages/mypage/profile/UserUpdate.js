@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import '../../../styles/mypage/profile/UserUpdate.css'
 
 const UserUpdate = () => {
   const history = useHistory();
@@ -34,7 +35,6 @@ const UserUpdate = () => {
       const decoded = jwtDecode(token);
       setProvider(decoded.provider);
 
-      // MyPage와 동일한 엔드포인트 사용
       const response = await axios.get('http://localhost:8080/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -42,7 +42,6 @@ const UserUpdate = () => {
       const data = response.data.data;
       console.log('Fetched user data:', data);
 
-      // 모든 필드를 초기값으로 설정
       setFormData({
         nickname: data.nickname || '',
         phoneNumber: data.phoneNumber || '',
@@ -91,106 +90,124 @@ const UserUpdate = () => {
 
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       alert('사용자 정보가 성공적으로 업데이트되었습니다.');
-      history.push('/mypage'); // 업데이트 후 마이페이지로 이동
+      history.push('/mypage');
     } catch (error) {
       console.error('Error updating user:', error);
       alert('사용자 정보 업데이트 중 오류가 발생했습니다.');
     }
   };
 
-  if (loading) return <div>로딩 중...</div>;
-  if (error) return <div>오류: {error}</div>;
+  if (loading) return <div className="loading-container">로딩 중...</div>;
+  if (error) return <div className="error-container">오류: {error}</div>;
 
   return (
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="nickname">닉네임:</label>
-          <input
-              type="text"
-              id="nickname"
-              name="nickname"
-              value={formData.nickname}
-              onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="phoneNumber">전화번호:</label>
-          <input
-              type="text"
-              id="phoneNumber"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="region">지역:</label>
-          <input
-              type="text"
-              id="region"
-              name="region"
-              value={formData.region}
-              onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="field">분야:</label>
-          <select
-              id="field"
-              name="field"
-              value={formData.field}
-              onChange={handleChange}
-          >
-            <option value="FRONTEND">프론트엔드</option>
-            <option value="BACKEND">백엔드</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="career">경력:</label>
-          <input
-              type="number"
-              id="career"
-              name="career"
-              value={formData.career}
-              onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="mbti">MBTI:</label>
-          <input
-              type="text"
-              id="mbti"
-              name="mbti"
-              value={formData.mbti}
-              onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="siteLink">사이트 링크:</label>
-          <input
-              type="text"
-              id="siteLink"
-              name="siteLink"
-              value={formData.siteLink}
-              onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="profileImage">프로필 이미지:</label>
-          <input
-              type="file"
-              id="profileImage"
-              onChange={handleImageChange}
-              accept="image/*"
-          />
-        </div>
-        <div>
-          <button type="button" onClick={() => history.push('/password-update')}>
-            비밀번호 변경
-          </button>
-          <button type="submit">정보 수정</button>
-        </div>
-      </form>
+      <div className="user-update-container">
+        <h2>프로필 수정</h2>
+        <form onSubmit={handleSubmit} className="user-update-form">
+          <div className="user-update-form-group">
+            <label htmlFor="nickname">닉네임</label>
+            <input
+                type="text"
+                id="nickname"
+                name="nickname"
+                value={formData.nickname}
+                onChange={handleChange}
+                placeholder="닉네임을 입력하세요"
+            />
+          </div>
+          <div className="user-update-form-group">
+            <label htmlFor="phoneNumber">전화번호</label>
+            <input
+                type="text"
+                id="phoneNumber"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                placeholder="전화번호를 입력하세요"
+            />
+          </div>
+          <div className="user-update-form-group">
+            <label htmlFor="region">지역</label>
+            <input
+                type="text"
+                id="region"
+                name="region"
+                value={formData.region}
+                onChange={handleChange}
+                placeholder="지역을 입력하세요"
+            />
+          </div>
+          <div className="user-update-form-group">
+            <label htmlFor="field">분야</label>
+            <select
+                id="field"
+                name="field"
+                value={formData.field}
+                onChange={handleChange}
+            >
+              <option value="FRONTEND">프론트엔드</option>
+              <option value="BACKEND">백엔드</option>
+            </select>
+          </div>
+          <div className="user-update-form-group">
+            <label htmlFor="career">경력</label>
+            <input
+                type="number"
+                id="career"
+                name="career"
+                value={formData.career}
+                onChange={handleChange}
+                placeholder="경력을 입력하세요"
+            />
+          </div>
+          <div className="user-update-form-group">
+            <label htmlFor="mbti">MBTI</label>
+            <input
+                type="text"
+                id="mbti"
+                name="mbti"
+                value={formData.mbti}
+                onChange={handleChange}
+                placeholder="MBTI를 입력하세요"
+            />
+          </div>
+          <div className="user-update-form-group">
+            <label htmlFor="siteLink">사이트 링크</label>
+            <input
+                type="text"
+                id="siteLink"
+                name="siteLink"
+                value={formData.siteLink}
+                onChange={handleChange}
+                placeholder="사이트 링크를 입력하세요"
+            />
+          </div>
+          <div className="user-update-form-group">
+            <label htmlFor="profileImage">프로필 이미지</label>
+            <input
+                type="file"
+                id="profileImage"
+                onChange={handleImageChange}
+                accept="image/*"
+            />
+          </div>
+          <div className="user-update-button-group">
+            <button
+                type="button"
+                className="btn-secondary"
+                onClick={() => history.push('/password-update')}
+            >
+              비밀번호 변경
+            </button>
+            <button
+                type="submit"
+                className="btn-primary"
+            >
+              정보 수정
+            </button>
+          </div>
+        </form>
+      </div>
   );
 };
 
