@@ -9,6 +9,7 @@ import ChatLayout from './chat/ChatLayout';
 import MyMentoring from './my-mentoring/MyMentoring';
 import PaymentHistoryForMentee from "./payment-history/PaymentHistoryForMentee";
 import PaymentHistoryDetail from "./payment-history/PaymentHistoryDetail";
+import PaymentHistoryForMentor from './payment-history/mentor/PaymentHistoryForMentor';
 import { useLocation } from 'react-router-dom';
 
 const MyPageHome = () => {
@@ -16,6 +17,20 @@ const MyPageHome = () => {
   const history = useHistory();
   const [selectedPaymentHistoryId, setSelectedPaymentHistoryId] = useState(null); // 선택된 결제 내역 ID 관리
   const location = useLocation();
+  const token = localStorage.getItem('jwtToken');
+  
+  let userRole = null;
+
+  const parseJwt = (token) => {
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.role;
+
+    };
+
+  if (token) {
+    userRole = parseJwt(token);        
+  }
 
   useEffect(() => {
     console.log('Location state:', location.state);
@@ -82,17 +97,29 @@ const MyPageHome = () => {
           {activeTab === 'history' && <MentorRequestList/>}
 
           {/* 거래 내역 탭 */}
-          {activeTab === "payment-history" &&
-              (selectedPaymentHistoryId ? (
-                  // 결제 내역 상세 보기
-                  <PaymentHistoryDetail
+          {activeTab === "payment-history" && 
+            (() => {
+              if (userRole === "MENTEE") {
+                if (selectedPaymentHistoryId) {
+                  return (
+                    <PaymentHistoryDetail
                       paymentHistoryId={selectedPaymentHistoryId}
-                      onBack={handleBackToList} // 목록으로 돌아가기 핸들러
-                  />
-              ) : (
-                  // 결제 내역 리스트 보기
-                  <PaymentHistoryForMentee onViewDetail={handleDetailView} />
-              ))}
+                      onBack={handleBackToList}
+                    />
+                  );
+                } else {
+                  return (
+                    <PaymentHistoryForMentee 
+                      onViewDetail={handleDetailView} 
+                    />
+                  );
+                }
+              } else if (userRole === "MENTOR") {
+                return <PaymentHistoryForMentor />;
+              }
+            })()
+          }
+
           {/* ... 다른 탭들의 컨텐츠 */}
         </div>
       </div>
