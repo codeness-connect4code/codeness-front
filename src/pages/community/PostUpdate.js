@@ -14,7 +14,7 @@ const PostUpdatePage = () => {
 
   // Axios 기본 설정
   useEffect(() => {
-    axios.defaults.baseURL = "http://localhost:8080";
+    axios.defaults.baseURL = "http://52.78.186.118:8080";
   }, []);
 
   // 게시글 상세 정보 가져오기
