@@ -3,6 +3,7 @@ import React from 'react';
 import MentorBankAccount from './MentorBankAccount';
 import MentorSettlementList from './MentorSettlementList';
 import MentorSettlementSummary from './MentorSettlementSummary';
+import { useState } from 'react';
 
 const containerStyle = {
   width: '100%',
@@ -39,18 +40,27 @@ const rightColumnStyle = {
 };
 
 const PaymentHistoryForMentor = () => {
+  // 공유할 상태를 부모로 끌어올림
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  // 자식 컴포넌트들의 데이터를 새로고침하는 함수
+  const handleRefresh = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
+
   return (
     <div style={containerStyle}>
       <div style={contentStyle}>
         <div style={layoutStyle}>
           {/* 왼쪽 정산내역 리스트 */}
           <div style={leftColumnStyle}>
-            <MentorSettlementList />
+            <MentorSettlementList
+              refreshTrigger={refreshTrigger} />
           </div>
           
           {/* 오른쪽 사이드 영역 */}
           <div style={rightColumnStyle}>
-            <MentorSettlementSummary />
+            <MentorSettlementSummary
+              onSettlementComplete={handleRefresh} />
             <MentorBankAccount />
           </div>
         </div>

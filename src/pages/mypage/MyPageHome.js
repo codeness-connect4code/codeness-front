@@ -18,7 +18,8 @@ const MyPageHome = () => {
   const [selectedPaymentHistoryId, setSelectedPaymentHistoryId] = useState(null); // 선택된 결제 내역 ID 관리
   const location = useLocation();
   const token = localStorage.getItem('jwtToken');
-  
+  // URL의 패턴을 확인하기 위한 pathname
+  const { pathname } = useLocation();
   let userRole = null;
 
   const parseJwt = (token) => {
@@ -99,6 +100,12 @@ const MyPageHome = () => {
           {/* 거래 내역 탭 */}
           {activeTab === "payment-history" && 
             (() => {
+              // pathname에 review가 포함되어 있으면 해당 컴포넌트를 렌더링하도록
+              if (pathname.includes('/payments/review')) {
+                // 이 부분은 그대로 두고 PaymentHistoryForMentee의 라우팅이 작동하도록 함
+                return null;
+              }
+
               if (userRole === "MENTEE") {
                 if (selectedPaymentHistoryId) {
                   return (

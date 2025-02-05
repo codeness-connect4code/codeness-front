@@ -1,5 +1,8 @@
 // MentorSettlementSummary.jsx
 import React from 'react';
+import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import api from '../../../../api/axios';
 
 const summaryContainerStyle = {
   backgroundColor: 'white',
@@ -46,34 +49,88 @@ const buttonStyle = {
   cursor: 'pointer'
 };
 
-const MentorSettlementSummary = () => {
-  const summaryData = {
-    totalCount: 12,
-    totalAmount: 600000,
-    commission: 24000,
-    finalAmount: 576000
+const MentorSettlementSummary = ({ onSettlementComplete  }) => {
+  const [pendingSettlements, setPendingSettlements] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = localStorage.getItem("jwtToken");
+
+  // fetchSettlementHistory를 별도의 함수로 정의
+  const fetchSettlementHistory = async () => {
+    if (!token) {
+      setError("로그인이 필요합니다.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const pendingResponse = await api.get("/mentors/mentoring/payment-history/settles-unprocessed", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPendingSettlements(pendingResponse.data.data);
+    } catch (error) {
+      setError("결제 내역을 불러오는 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
 
+  useEffect(() => {
+    fetchSettlementHistory();
+  }, [token]);  // onDataReceived 제거 (불필요한 리렌더링 방지)
+
+  const handleSettlementRequest = async () => {
+    
+
+    try {
+      setLoading(true);
+      await api.patch("/mentors/mentoring/payment-history/settles", {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      alert("정산 요청이 완료되었습니다.");
+      await fetchSettlementHistory();  // 정산 내역 다시 불러오기
+      onSettlementComplete();
+    } catch (error) {
+      setError("정산 요청 중 오류가 발생했습니다.");
+      alert(error.response?.data?.message || "정산 요청 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+ 
   return (
     <div style={summaryContainerStyle}>
-      <h2 style={titleStyle}>이번 달 정산내역</h2>
+      <h2 style={titleStyle}>신청할 정산내역</h2>
       <div style={itemStyle}>
         <span style={labelStyle}>총 건수</span>
-        <span>{summaryData.totalCount}건</span>
+        <span>{pendingSettlements.count}건</span>
       </div>
       <div style={itemStyle}>
         <span style={labelStyle}>총 정산액</span>
-        <span>{summaryData.totalAmount.toLocaleString()}원</span>
+        <span>{pendingSettlements.totalCost}원</span>
       </div>
       <div style={itemStyle}>
         <span style={labelStyle}>중계 수수료</span>
-        <span>{summaryData.commission.toLocaleString()}원</span>
+        <span>{pendingSettlements.charge}원</span>
       </div>
       <div style={finalAmountStyle}>
         <span>최종 정산금액</span>
-        <span>{summaryData.finalAmount.toLocaleString()}원</span>
+        <span>{pendingSettlements.finalCost}원</span>
       </div>
-      <button style={buttonStyle}>정산 받기</button>
+      <button style={{...buttonStyle,
+        backgroundColor: pendingSettlements.count > 0 ? '#3b82f6' : '#e5e7eb',
+        cursor: pendingSettlements.count > 0 ? 'pointer' : 'not-allowed'
+      }}
+      onClick={handleSettlementRequest}
+      disabled={!pendingSettlements.count}
+    >
+      {pendingSettlements.count > 0 ? '정산 받기' : '정산할 내역이 없습니다'}</button>
     </div>
   );
 };

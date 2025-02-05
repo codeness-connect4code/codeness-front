@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
-const PaymentHistory = ({ onViewDetail }) => {
+const PaymentHistoryForMentee = ({ onViewDetail }) => {
   const [paymentHistories, setPaymentHistories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -59,6 +59,7 @@ const PaymentHistory = ({ onViewDetail }) => {
       history.push({
         pathname: "/mypage/payments/review",
         state: {
+          activeTab: 'payment-history',
           paymentHistoryId,
           mentoringPostId,
           postTitle,
@@ -69,7 +70,10 @@ const PaymentHistory = ({ onViewDetail }) => {
       });
     } else {
       // 리뷰 보기 페이지로 이동
-      history.push(`/mypage/payments/review/${paymentHistoryId}`);
+      history.push({
+          pathname:  `/mypage/payments/review/${paymentHistoryId}`,
+          state: { activeTab: 'payment-history' }
+      });
     }
   };
 
@@ -107,4 +111,4 @@ const PaymentHistory = ({ onViewDetail }) => {
   );
 };
 
-export default PaymentHistory;
+export default PaymentHistoryForMentee;

@@ -49,7 +49,7 @@ const descriptionStyle = {
   marginTop: '2px'
 };
 
-const MentorSettlementList = () => {
+const MentorSettlementList = ({refreshTrigger}) => {
   // 테스트를 위해 더 많은 데이터 추가
   const history = useHistory();
   const [settlements, setSettlements] = useState([]);
@@ -57,12 +57,18 @@ const MentorSettlementList = () => {
   const [error, setError] = useState(null);
   const token = localStorage.getItem("jwtToken");
 
+  const handleDetailClick = (paymentHistoryId) => {
+    console.log("버튼을 누를시 전달",paymentHistoryId);
+    history.push(`/mypage/payment-history/detail/${paymentHistoryId}/mentor`);
+  };
+
+
   const getSettlementStatusText = (status) => {
     switch (status) {
       case "UNPROCESSED":
-        return "미처리";
+        return "정산 미처리";
       case "PROCESSING":
-        return "처리중";
+        return "정산 처리중";
       case "COMPLETE":
         return "정산 완료";     
     }
@@ -79,6 +85,7 @@ const MentorSettlementList = () => {
       
 
       try {
+        //정산 내역 요청
         const response = await api.get("/mentoring/payment-history", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -86,6 +93,7 @@ const MentorSettlementList = () => {
         });
 
         setSettlements(response.data.data);
+        
       } catch (error) {
         setError("결제 내역을 불러오는 중 오류가 발생했습니다.");
       } finally {
@@ -94,7 +102,7 @@ const MentorSettlementList = () => {
     };
 
     fetchSettlementHistory();
-  }, [token]);
+  }, [refreshTrigger]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
@@ -104,7 +112,9 @@ const MentorSettlementList = () => {
           <h2 style={titleStyle}>정산 내역</h2>
           <div style={listWrapperStyle}>
             {settlements.map((settlement) => (
-              <button key={settlement.id} style={settlementItemStyle}>
+              <button key={settlement.id}
+                      style={settlementItemStyle}
+                      onClick={() => handleDetailClick(settlement.id)}>
                 <div style={itemTextStyle}>
                   {getSettlementStatusText(settlement.settlementStatus)} - {settlement.userNickname} / {settlement.mentoringDate} / {settlement.mentoringTime?.substring(0, 5)}
                 </div>

@@ -31,7 +31,6 @@ import PostUpdatePage from "./pages/community/PostUpdate";
 import MentoringPaymentSuccessPage from "./pages/payment/MentoringPaymentSuccess";
 import ChatLayout from "./pages/mypage/chat/ChatLayout";
 import MyMentoring from "./pages/mypage/my-mentoring/MyMentoring";
-
 // 로그인이 필요한 페이지를 위한 Private Route
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = !!localStorage.getItem("jwtToken");
