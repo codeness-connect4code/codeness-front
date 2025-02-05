@@ -26,7 +26,7 @@ const Login = () => {
       );
 
       // 응답 헤더에서 토큰 추출 (서버 응답 방식에 따라 조정 필요)
-      const token = response.headers["authorization"] || response.data.token;
+      const token = response.headers["authorization"] || response.data.data;
 
       if (token) {
         // 토큰 저장 키를 'jwtToken'으로 통일
