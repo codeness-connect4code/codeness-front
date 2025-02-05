@@ -53,7 +53,7 @@ const MyPageHome = () => {
                   onClick={() => {
                     setActiveTab(tab.id);
                     setSelectedPaymentHistoryId(null); // 탭 전환 시 상세 보기 상태 초기화
-                    // window.history.pushState(null, '', `/mypage/${tab.id}`);
+                    history.push(`/mypage/${tab.id}`,{ activeTab: tab.id });
                   }}
                   style={{
                     padding: '10px',
