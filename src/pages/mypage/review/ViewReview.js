@@ -4,7 +4,7 @@ import { DEFAULT_PROFILE_IMAGE } from "../../../assets/constants";
 import api from '../../../api/axios';
 import axios from "axios";
 
-function ViewReview(props){
+function ViewReview({paymentHistoryId}){
     //상태 관리
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null); 
@@ -12,13 +12,15 @@ function ViewReview(props){
 
     //토큰 가져오기
     const token = localStorage.getItem("jwtToken");
-    //경로 변수 받아오기
-    const paymentHistoryId = props.match.params.paymentHistoryId;
 
     useEffect(() => {
     const controller = new AbortController();
         
         const fetchData = async () => {
+            if (!paymentHistoryId) {
+                console.error('paymentHistoryId is missing');
+                return;
+            }
             setLoading(true);
             try {
                 const response = await api.get(`/payment-history/${paymentHistoryId}/reviews`, {
@@ -27,10 +29,16 @@ function ViewReview(props){
                     },
                     signal: controller.signal
                 });
+                console.log('API Response:', response); // 응답 데이터 확인
                 setData(response.data.data);
             } catch (error) {
                 if (!axios.isCancel(error)) {
                     console.error('데이터 가져오기 실패:', error);
+                    console.log('Error details:', {
+                        message: error.message,
+                        response: error.response,
+                        request: error.request
+                    }); // 오류 상세 정보 확인
                     setError(error);
                 }
             } finally {
@@ -64,15 +72,17 @@ function ViewReview(props){
     if (!data) return null;
 
     return(
-            <div style={{
-                width: "70%",
-                height: "100%",
-                paddingTop: "30px",
-                paddingLeft: "5px",
-                margin: "auto",
-                border: "2px solid gray",
-                borderRadius: "10px"
-            }}>
+        <div style={{
+            width: "70%",
+            height: "70%",
+            paddingTop: "30px",
+            paddingLeft: "5px",
+            paddingRight: "20px",  // 오른쪽 패딩 추가
+            margin: "auto",
+            border: "2px solid gray",
+            borderRadius: "10px",
+            position: "relative"    // 상대 위치 설정
+        }}>
                 <p><img
                 src= {data.profileUrl || DEFAULT_PROFILE_IMAGE}
                 alt="멘토 이미지"
@@ -108,9 +118,19 @@ function ViewReview(props){
                       // 수직으로만 크기 조절 가능
                 }}
                 >{data.content}</div>
+                 <div style={{ 
+                        width: '100%',     // 전체 너비 사용
+                        textAlign: 'right', // 내용 오른쪽 정렬
+                        marginTop: '20px'   // 위 여백 추가
+                    }}>
                 <TrashButton style={{
-                    float: "right"
-                }} onDelete={(id) => deleteItem(id)} id={data.reviewId} url='/'/>
+                    marginRight: '10px',
+                    marginBottom: '10px'
+                }} onDelete={(id) => deleteItem(id)} id={data.reviewId}
+                 url={{
+                    pathname: '/mypage/payment-history',
+                    state: { activeTab: 'payment-history' }
+                }}/></div>
                 <br/>
             </div>
     )

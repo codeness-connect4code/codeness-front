@@ -39,7 +39,7 @@ const MainPosts = () => {
      <h2
      style={{ cursor: 'pointer'}}
      onClick={() => history.push('/community')}
-     >최신 게시글</h2>
+     >인기 게시글</h2>
      <div style={{
         width: "60%",
         border: "2px solid gray",
