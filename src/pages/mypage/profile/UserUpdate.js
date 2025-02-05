@@ -74,21 +74,29 @@ const UserUpdate = () => {
     const token = localStorage.getItem('jwtToken');
 
     const formDataToSend = new FormData();
-    Object.keys(formData).forEach((key) => {
-      formDataToSend.append(key, formData[key]);
-    });
+
+    // 기존 폼 데이터 추가
+    formDataToSend.append('nickname', formData.nickname);
+    formDataToSend.append('phoneNumber', formData.phoneNumber);
+    formDataToSend.append('region', formData.region);
+    formDataToSend.append('field', formData.field);
+    formDataToSend.append('career', formData.career);
+    formDataToSend.append('mbti', formData.mbti);
+    formDataToSend.append('siteLink', formData.siteLink);
+
+    // 프로필 이미지 추가
     if (profileImage) {
       formDataToSend.append('multipartFile', profileImage);
     }
 
     try {
-      const response = await fetch('/users', {
-        method: 'PATCH',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formDataToSend,
+      const response = await axios.patch('http://localhost:8080/users', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
       });
 
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       alert('사용자 정보가 성공적으로 업데이트되었습니다.');
       history.push('/mypage');
     } catch (error) {
@@ -104,6 +112,7 @@ const UserUpdate = () => {
       <div className="user-update-container">
         <h2>프로필 수정</h2>
         <form onSubmit={handleSubmit} className="user-update-form">
+
           <div className="user-update-form-group">
             <label htmlFor="nickname">닉네임</label>
             <input
