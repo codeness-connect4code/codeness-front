@@ -59,7 +59,13 @@ const MentorSettlementList = ({refreshTrigger}) => {
 
   const handleDetailClick = (paymentHistoryId) => {
     console.log("버튼을 누를시 전달",paymentHistoryId);
-    history.push(`/mypage/payment-history/detail/${paymentHistoryId}/mentor`);
+    history.push({
+      pathname: `/mypage/payment-history/detail/${paymentHistoryId}/mentor`,
+      state:{
+        paymentHistoryId: paymentHistoryId,
+        activeTab: 'payment-history'
+      }}
+    );
   };
 
 
@@ -86,7 +92,7 @@ const MentorSettlementList = ({refreshTrigger}) => {
 
       try {
         //정산 내역 요청
-        const response = await api.get("/mentoring/payment-history", {
+        const response = await api.get("/payment-history", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

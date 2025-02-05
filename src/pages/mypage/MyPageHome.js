@@ -10,7 +10,10 @@ import MyMentoring from './my-mentoring/MyMentoring';
 import PaymentHistoryForMentee from "./payment-history/PaymentHistoryForMentee";
 import PaymentHistoryDetail from "./payment-history/PaymentHistoryDetail";
 import PaymentHistoryForMentor from './payment-history/mentor/PaymentHistoryForMentor';
+import WriteView from './review/WriteReview';
+import ViewReview from './review/ViewReview';
 import { useLocation } from 'react-router-dom';
+import MentorSettlementDetail from './payment-history/mentor/MentorSettlementDetail';
 
 const MyPageHome = () => {
   const [activeTab, setActiveTab] = useState('profile');
@@ -19,7 +22,7 @@ const MyPageHome = () => {
   const location = useLocation();
   const token = localStorage.getItem('jwtToken');
   // URL의 패턴을 확인하기 위한 pathname
-  const { pathname } = useLocation();
+  const pathname = location.pathname;
   let userRole = null;
 
   const parseJwt = (token) => {
@@ -87,7 +90,8 @@ const MyPageHome = () => {
           flex: 1,
           padding: '20px',
           border: '2px solid gray',
-          borderRadius: '10px'
+          borderRadius: '10px',
+          minHeight: '40vh',  // 추가: 최소 높이 설정
         }}>
           {/* 각 탭에 해당하는 컴포넌트를 여기에 렌더링 */}
           {activeTab === 'profile' && <MyPage/>}
@@ -100,11 +104,24 @@ const MyPageHome = () => {
           {/* 거래 내역 탭 */}
           {activeTab === "payment-history" && 
             (() => {
-              // pathname에 review가 포함되어 있으면 해당 컴포넌트를 렌더링하도록
-              if (pathname.includes('/payments/review')) {
-                // 이 부분은 그대로 두고 PaymentHistoryForMentee의 라우팅이 작동하도록 함
-                return null;
-              }
+              console.log("선택된 아이디는",selectedPaymentHistoryId);
+              // 리뷰 관련 라우팅 처리
+    if (pathname.includes('/payment-history/review')) {
+      // 리뷰 보기 (ex: /payment-history/review/123)
+      if (pathname.includes('/payment-history/review/')) {
+        console.log("포함된 아이디는 ",location.state.paymentHistoryId);
+        const paymentHistoryId = location.state?.paymentHistoryId || pathname.split('/review/')[1];
+        return <ViewReview paymentHistoryId={paymentHistoryId} />;
+      }
+      // 리뷰 작성
+      return <WriteView />;
+    }
+
+    if ( pathname.includes(`/payment-history/detail/${location.state.paymentHistoryId}/mentor`)){
+      console.log("여기까지 잘오셨습니다. 여기는 잘온겁니다.");
+
+      return < MentorSettlementDetail />
+    }
 
               if (userRole === "MENTEE") {
                 if (selectedPaymentHistoryId) {
