@@ -69,7 +69,7 @@ const MentoringReservation = () => {
 
     try {
       const response = await axios.post(
-          "/mentoring/payments",
+          "/payments/mentoring-schedules",
           {
             mentoringScheduleId: selectedSchedule.id,
             paymentCost: mentoringPost.price,// 공고에서 전달받은 가격 사용
