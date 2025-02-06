@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from "../../../api/axios";
 import { useHistory } from 'react-router-dom';
 import '../../../styles/admin/MentorSettlement.css'
 
@@ -17,7 +17,7 @@ const MentorSettlement = () => {
     const token = localStorage.getItem('jwtToken');
 
     try {
-      const response = await axios.get('http://localhost:8080/admin/mentors/settlements', {
+      const response = await api.get('http://localhost:8080/admin/mentors/settlements', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

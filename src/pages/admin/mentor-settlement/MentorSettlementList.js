@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from "../../../api/axios";
 
 function MentorSettlementList() {
   const [settlementDetails, setSettlementDetails] = useState(null);
@@ -14,10 +14,10 @@ function MentorSettlementList() {
   const fetchData = async () => {
     try {
       const [detailsResponse, listResponse] = await Promise.all([
-        axios.get(`/admin/mentors/settlements-detail/${mentorId}`, {
+        api.get(`/admin/mentors/settlements-detail/${mentorId}`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        axios.get(`/admin/mentors/settlements/${mentorId}`, {
+        api.get(`/admin/mentors/settlements/${mentorId}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -36,7 +36,7 @@ function MentorSettlementList() {
 
   const handleSettlement = async () => {
     try {
-      await axios.patch(`/admin/mentors/${mentorId}/settlements`, {}, {
+      await api.patch(`/admin/mentors/${mentorId}/settlements`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('정산이 완료되었습니다.');
