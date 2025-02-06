@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/axios';
 import MentorBanner from './MentorBanner';
 import './Home.css';
 
@@ -13,7 +13,7 @@ const MentorRecommendation = () => {
 
   const fetchMentors = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/users/mentoring',{
+      const response = await api.get('/users/mentoring',{
         headers: {
             'Authorization': `Bearer ${token}`
         },
