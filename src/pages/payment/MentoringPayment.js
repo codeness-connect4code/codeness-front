@@ -44,7 +44,7 @@ const MentoringPayment = () => {
       if (rsp.success) {
         try {
           await api.post(
-              `/mentoring/payments/${paymentId}/verify`,
+              `/payments/${paymentId}/verify`,
               {
                 mentoringScheduleId: scheduleId,
                 impUid: rsp.imp_uid,
