@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import '../../styles/auth/SignUp.css'
+import api from '../../api/axios';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -83,7 +83,7 @@ const SignUp = () => {
     }
 
     try {
-      await axios.post('http://localhost:8080/signup', formData);
+      await api.post('/signup', formData);
       alert('회원가입이 완료되었습니다.');
       history.push('/login');
     } catch (error) {
