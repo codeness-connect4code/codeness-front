@@ -23,7 +23,7 @@ const CommunityPage = () => {
     "자유 게시판": "FREE",
     공지사항: "NOTICE",
   };
- 
+
   // 데이터 요청 함수
   const fetchPosts = async (params = {}) => {
     if (isFetching.current) return; // 요청 중이라면 실행하지 않음
