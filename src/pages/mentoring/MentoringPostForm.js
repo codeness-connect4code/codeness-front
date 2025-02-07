@@ -5,23 +5,21 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useHistory, useLocation } from "react-router-dom";
 import "../../styles/mentoring/MentoringPostForm.css";
 import api from "../../api/axios";
-
 const MentoringPostForm = () => {
   const { handleSubmit, control, register, formState: { errors } } = useForm();
   const history = useHistory();
   const location = useLocation();
   const [errorMessage, setErrorMessage] = useState(null);
-
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const token = params.get("token");
-
     if (token) {
       localStorage.setItem("jwtToken", token);
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       window.history.replaceState({}, document.title, "/mentoring");
     }
-
     const savedToken = localStorage.getItem("jwtToken");
     if (!savedToken) {
       history.push("/login");
@@ -29,7 +27,6 @@ const MentoringPostForm = () => {
       api.defaults.headers.common["Authorization"] = `Bearer ${savedToken}`;
     }
   }, [location, history]);
-
   const validateDates = (startDate, endDate) => {
     if (new Date(endDate) < new Date(startDate)) {
       setErrorMessage("종료 날짜는 시작 날짜 이후여야 합니다.");
@@ -37,34 +34,19 @@ const MentoringPostForm = () => {
     }
     return true;
   };
-
-  const validateTime = (startTime, endTime) => {
-    const now = new Date();
-    const currentHour = now.getHours();
-    const startHour = parseInt(startTime.split(":")[0], 10);
-    const endHour = parseInt(endTime.split(":")[0], 10);
-
-    if (startHour < currentHour || endHour < currentHour) {
-      setErrorMessage("시작 시간과 종료 시간은 현재 시간 이후여야 합니다.");
-      return false;
-    }
-    return true;
-  };
-
   const onSubmit = async (data) => {
     if (!validateDates(data.startDate, data.endDate)) {
       return;
     }
-
-    if (!validateTime(data.startTime, data.endTime)) {
-      return;
-    }
-
     const fieldMap = {
       "Back-End": "BACKEND",
       "Front-End": "FRONTEND",
+      "Game": "Game",
+      "AI":"AI",
+      "Server-Infra":"SERVER_INFRA",
+      "Network-Security":"NETWORK_SECURITY",
+      "Embedded-Systems":"EMBEDDED_SYSTEMS"
     };
-
     const requestData = {
       title: data.title,
       company: data.company,
@@ -78,16 +60,20 @@ const MentoringPostForm = () => {
       endTime: data.endTime,
       description: data.description,
     };
-
     try {
       const response = await api.post("/mentoring", requestData);
-      alert(response.data.msg);
+      setModalMessage(response.data.msg);
+      setShowModal(true);
+      history.push("/mentoring");
     } catch (error) {
       console.error(error);
-      setErrorMessage("멘토링 공고 생성에 실패했습니다.");
+      setModalMessage("멘토링 공고 생성에 실패했습니다.");
+      setShowModal(true);
     }
   };
-
+  const closeModal = () => {
+    setShowModal(false);
+  };
   return (
       <div className="container">
         <h2>멘토 공고 올리기</h2>
@@ -103,11 +89,9 @@ const MentoringPostForm = () => {
                     message: "공고 제목은 30자 이내로 작성해주세요.",
                   },
                 })}
-                placeholder="멘토 공고입니다."
             />
             {errors.title && <span className="error-message">{errors.title.message}</span>}
           </div>
-
           <div className="form-group">
             <label>회사명</label>
             <input
@@ -118,20 +102,23 @@ const MentoringPostForm = () => {
                     message: "회사 이름은 20자 이내로 작성해주세요.",
                   },
                 })}
-                placeholder="회사명을 입력해주세요."
+                placeholder="예) 스파르타"
             />
             {errors.company && <span className="error-message">{errors.company.message}</span>}
           </div>
-
           <div className="form-group">
             <label>분야</label>
-            <select {...register("field", { required: "분야를 선택해주세요." })}>
+            <select {...register("field", {required: "분야를 선택해주세요."})}>
               <option value="Back-End">Back-End</option>
               <option value="Front-End">Front-End</option>
+              <option value="Game">Game</option>
+              <option value="AI">AI</option>
+              <option value="Server-Infra">Server-Infra</option>
+              <option value="Network-Security">Network-Security</option>
+              <option value="Embedded-Systems">Embedded-Systems</option>
             </select>
             {errors.field && <span className="error-message">{errors.field.message}</span>}
           </div>
-
           <div className="form-group">
             <label>경력 (년)</label>
             <input
@@ -148,7 +135,6 @@ const MentoringPostForm = () => {
             />
             {errors.career && <span className="error-message">{errors.career.message}</span>}
           </div>
-
           <div className="form-group">
             <label>지역</label>
             <input
@@ -159,11 +145,10 @@ const MentoringPostForm = () => {
                     message: "지역은 30자 이내로 작성해주세요.",
                   },
                 })}
-                placeholder="예: 온라인/오프라인 서울권"
+                placeholder="예) 서울권, 경기도"
             />
             {errors.region && <span className="error-message">{errors.region.message}</span>}
           </div>
-
           <div className="form-group">
             <label>시간당 멘토링 가격 (원)</label>
             <input
@@ -180,11 +165,10 @@ const MentoringPostForm = () => {
                     message: "시간당 최대 가격은 100,000원입니다.",
                   },
                 })}
-                placeholder="15000"
+                placeholder="예) 15000"
             />
             {errors.price && <span className="error-message">{errors.price.message}</span>}
           </div>
-
           <div className="form-group">
             <label>시작 날짜</label>
             <Controller
@@ -202,7 +186,6 @@ const MentoringPostForm = () => {
             />
             {errors.startDate && <span className="error-message">{errors.startDate.message}</span>}
           </div>
-
           <div className="form-group">
             <label>종료 날짜</label>
             <Controller
@@ -220,7 +203,6 @@ const MentoringPostForm = () => {
             />
             {errors.endDate && <span className="error-message">{errors.endDate.message}</span>}
           </div>
-
           <div className="form-group">
             <label>시작 시간</label>
             <Controller
@@ -237,7 +219,6 @@ const MentoringPostForm = () => {
                             <option
                                 key={i}
                                 value={`${String(i).padStart(2, "0")}:00`}
-                                disabled={i < currentHour}
                             >
                               {`${String(i).padStart(2, "0")}:00`}
                             </option>
@@ -248,7 +229,6 @@ const MentoringPostForm = () => {
             />
             {errors.startTime && <span className="error-message">{errors.startTime.message}</span>}
           </div>
-
           <div className="form-group">
             <label>종료 시간</label>
             <Controller
@@ -265,7 +245,6 @@ const MentoringPostForm = () => {
                             <option
                                 key={i}
                                 value={`${String(i).padStart(2, "0")}:00`}
-                                disabled={i < currentHour}
                             >
                               {`${String(i).padStart(2, "0")}:00`}
                             </option>
@@ -276,7 +255,6 @@ const MentoringPostForm = () => {
             />
             {errors.endTime && <span className="error-message">{errors.endTime.message}</span>}
           </div>
-
           <div className="form-group">
             <label>설명글</label>
             <textarea
@@ -291,11 +269,63 @@ const MentoringPostForm = () => {
             />
             {errors.description && <span className="error-message">{errors.description.message}</span>}
           </div>
-
           <button type="submit">작성하기</button>
         </form>
+        <style jsx>{`
+          .container {
+            width: 50%;
+            margin: 50px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+          }
+          h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+          }
+          .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 15px;
+          }
+          label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+          }
+          input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+          }
+          .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+          }
+          button {
+            width: 100%;
+            padding: 12px;
+            background-color: #82b1ff;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+          }
+          button:hover {
+            background-color: #448aff;
+          }
+        `}</style>
       </div>
   );
 };
-
 export default MentoringPostForm;
