@@ -54,11 +54,9 @@ const Login = () => {
     }
   };
 
-  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-
   // 구글 로그인 핸들러
   const handleGoogleLogin = () => {
-    window.location.href = `${SERVER_URL}/oauth2/authorization/google`;
+    window.location.href = "https://api.codeness.kr/oauth2/authorization/google";
   };
 
   return (
