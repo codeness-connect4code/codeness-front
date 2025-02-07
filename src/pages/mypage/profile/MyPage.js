@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import '../../../styles/mypage/profile/MyPage.css'
 import placeholder from '../../../assets/icons/profile-placeholder.png'
+import api from '../../../api/axios';
 
 const MyPage = () => {
   const [userData, setUserData] = useState(null);
@@ -12,7 +12,7 @@ const MyPage = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('jwtToken');
-        const response = await axios.get('http://localhost:8080/users', {
+        const response = await api.get('/users', {
           headers: {
             'Authorization': `Bearer ${token}`
           }

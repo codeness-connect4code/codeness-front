@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import axios from "axios";
+import api from "../../api/axios";
 import "../../styles/payment/MentoringReservation.css";
 
 const MentoringReservation = () => {
@@ -18,7 +18,7 @@ const MentoringReservation = () => {
   useEffect(() => {
     const fetchMentoringPost = async () => {
       try {
-        const response = await axios.get(`/mentoring/${mentoringPostId}`, {
+        const response = await api.get(`/mentoring/${mentoringPostId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -36,7 +36,7 @@ const MentoringReservation = () => {
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
-        const response = await axios.get(
+        const response = await api.get(
             `/mentoring/${mentoringPostId}/mentoring-schedule/empty-status`,
             {
               headers: {
@@ -68,7 +68,7 @@ const MentoringReservation = () => {
     }
 
     try {
-      const response = await axios.post(
+      const response = await api.post(
           "/payments/mentoring-schedules",
           {
             mentoringScheduleId: selectedSchedule.id,
