@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {useParams, useHistory} from "react-router-dom";
-import axios from "axios";
-
+import api from "../../api/axios";
 const PostDetailPage = () => {
   const {postId} = useParams();
   const history = useHistory();
@@ -16,16 +15,6 @@ const PostDetailPage = () => {
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [commentId, setCommentId] = useState(null); // 수정 중인 댓글 ID
   const [editContent, setEditContent] = useState(""); // 수정 중인 댓글 내용
-
-  // Axios 기본 설정
-  useEffect(() => {
-    const token = localStorage.getItem("jwtToken");
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
-    axios.defaults.baseURL = process.env.BACKEND_URL;
-  }, []);
-
   // JWT 토큰 검증 및 디코딩 함수
   const validateToken = (token) => {
     if (!token) {
@@ -46,13 +35,11 @@ const PostDetailPage = () => {
       return {isValid: false, userId: null};
     }
   };
-
   // 게시글 상세 정보 가져오기
   const fetchPostDetails = async () => {
     try {
-      const response = await axios.get(`/posts/${postId}`);
+      const response = await api.get(`/posts/${postId}`);
       setPost(response.data.data);
-
       // JWT 토큰 검증 및 작성자 확인
       const token = localStorage.getItem("jwtToken");
       if (token) {
@@ -68,15 +55,13 @@ const PostDetailPage = () => {
       setLoading(false);
     }
   };
-
   // 댓글 목록 가져오기
   const fetchComments = async () => {
     setCommentsLoading(true);
     try {
-      const response = await axios.get(`/posts/${postId}/comments`);
+      const response = await api.get(`/posts/${postId}/comments`);
       const token = localStorage.getItem("jwtToken");
       const {isValid, userId} = validateToken(token);
-
       const updatedComments = response.data.data.content.map((comment) => ({
         ...comment,
         isAuthor: isValid && comment.userId === userId, // 댓글 작성자 여부 확인
@@ -89,7 +74,6 @@ const PostDetailPage = () => {
       setCommentsLoading(false);
     }
   };
-
   // 댓글 수정
   const handleEditComment = (comment) => {
     if (!comment || !comment.id) {
@@ -100,7 +84,6 @@ const PostDetailPage = () => {
     setCommentId(comment.id); // 수정할 댓글 ID 설정
     setEditContent(comment.content); // 기존 내용 설정
   };
-
   // 댓글 수정 완료
   const submitEditComment = async () => {
     if (!editContent.trim()) {
@@ -108,18 +91,15 @@ const PostDetailPage = () => {
       setShowModal(true);
       return;
     }
-
     try {
       const token = localStorage.getItem("jwtToken");
-      await axios.patch(
+      await api.patch(
           `/comments/${commentId}`, // 댓글 ID는 경로 변수로 전송
           {content: editContent}, // 수정할 내용은 Body로 전송
           {headers: {Authorization: `Bearer ${token}`}}
       );
-
       // 댓글 목록을 다시 가져오기
       await fetchComments();
-
       setModalMessage("댓글이 수정되었습니다.");
       setShowModal(true);
       setCommentId(null); // 수정 상태 초기화
@@ -129,20 +109,18 @@ const PostDetailPage = () => {
       setShowModal(true);
     }
   };
-
   // 댓글 수정 취소
   const cancelEditComment = () => {
     setCommentId(null); // 수정 상태 초기화
     setEditContent("");
   };
-
   // 댓글 삭제
   const handleDeleteComment = (commentId) => {
     setModalMessage("정말로 이 댓글을 삭제하시겠습니까?");
     setModalConfirm(() => async () => {
       try {
         const token = localStorage.getItem("jwtToken");
-        await axios.delete(`/comments/${commentId}`, {
+        await api.delete(`/comments/${commentId}`, {
           headers: {Authorization: `Bearer ${token}`},
         });
         setModalMessage("댓글이 삭제되었습니다.");
@@ -156,13 +134,12 @@ const PostDetailPage = () => {
     });
     setShowModal(true);
   };
-
   // 게시글 삭제
   const handleDelete = async () => {
     setModalMessage("정말로 삭제하시겠습니까?");
     setModalConfirm(() => async () => {
       try {
-        await axios.delete(`/posts/${postId}`);
+        await api.delete(`/posts/${postId}`);
         setModalMessage("게시글이 삭제되었습니다.");
         setModalConfirm(null); // 확인 후 삭제 로직 해제
         setShowModal(true);
@@ -174,12 +151,10 @@ const PostDetailPage = () => {
     });
     setShowModal(true);
   };
-
   // 게시글 수정
   const handleEdit = () => {
     history.push(`/posts/${postId}/update`);
   };
-
   // 댓글 등록
   const handleCommentSubmit = async () => {
     if (!newComment.trim()) {
@@ -187,10 +162,9 @@ const PostDetailPage = () => {
       setShowModal(true);
       return;
     }
-
     try {
       const token = localStorage.getItem("jwtToken");
-      await axios.post(
+      await api.post(
           `/posts/${postId}/comments`,
           {content: newComment},
           {headers: {Authorization: `Bearer ${token}`}}
@@ -204,39 +178,41 @@ const PostDetailPage = () => {
       setShowModal(true);
     }
   };
-
   // 모달 닫기
   const closeModal = () => {
     setShowModal(false);
     setModalConfirm(null); // 확인 핸들러 초기화
   };
-
   useEffect(() => {
     fetchPostDetails();
-
     // 댓글 데이터는 게시글 수정 페이지가 아닌 경우에만 가져오기
     if (window.location.pathname === `/posts/${postId}`) {
       fetchComments();
     }
   }, [postId]);
-
   if (loading) {
     return <div>로딩 중...</div>;
   }
-
   return (
       <div className="post-detail-page">
         {post ? (
             <div className="post-container">
               <h1>{post.title}</h1>
               <div className="post-meta">
-                <span>작성자: {post.writer}</span>
+                <div className="writer-info">
+                  <img
+                      src={post.writerProfileUrl
+                          || "https://images.unsplash.com/photo-1734613876170-079f67aa0d15?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D"}
+                      alt="프로필"
+                      className="profile-img"
+                  />
+                  <span>{post.writer}</span>
+                </div>
                 <span>조회수: {post.view}</span>
                 <span>작성일(수정일): {new Date(
                     post.modifiedAt).toLocaleDateString()}</span>
               </div>
               <div className="post-content">{post.content}</div>
-
               {isAuthor && (
                   <div className="post-actions">
                     <button onClick={handleEdit}>수정</button>
@@ -247,7 +223,6 @@ const PostDetailPage = () => {
         ) : (
             <p>게시글을 불러오는 중입니다...</p>
         )}
-
         <div className="comments-section">
           <h2>댓글</h2>
           {commentsLoading ? (
@@ -258,6 +233,12 @@ const PostDetailPage = () => {
               comments.map((comment) => (
                   <div key={comment.id} className="comment">
                     <div className="comment-header">
+                      <img
+                          src={comment.writerProfileUrl
+                              || "https://images.unsplash.com/photo-1734613876170-079f67aa0d15?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D"}
+                          alt="프로필"
+                          className="profile-img"
+                      />
                       <span>{comment.writer}</span>
                       <span>{new Date(
                           comment.createdAt).toLocaleDateString()}</span>
@@ -296,10 +277,7 @@ const PostDetailPage = () => {
           />
           <button onClick={handleCommentSubmit}>댓글 등록</button>
         </div>
-
-
         <button onClick={() => history.push("/community")}>글 목록으로</button>
-
         {showModal && (
             <div className="modal-overlay">
               <div className="modal-content">
@@ -324,62 +302,51 @@ const PostDetailPage = () => {
               </div>
             </div>
         )}
-
         <style jsx>{`
           .post-detail-page {
             font-family: Arial, sans-serif;
             padding: 20px;
           }
-
           .post-container {
             border: 1px solid #ddd;
             border-radius: 5px;
             padding: 20px;
             margin-bottom: 20px;
           }
-
           .post-header {
             margin-bottom: 20px;
           }
-
           .post-meta span {
             margin-right: 30px;
             color: gray;
           }
-
           .post-content {
             margin-top: 60px;
             font-size: 16px;
             line-height: 1.5;
           }
-
           .comment-header {
             display: flex;
             justify-content: space-between;
             font-size: 14px;
           }
-
           .comment-actions {
             margin-top: 10px;
           }
-
           .comments-section {
             border: 1px solid #ddd;
             border-radius: 5px;
             padding: 20px;
           }
-
           .comments-list .comment {
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
           }
-
           .comment-meta span {
             margin-right: 10px;
             font-size: 12px;
             color: gray;
           }
-
           .comment-form textarea {
             width: 100%;
             height: 80px;
@@ -389,7 +356,6 @@ const PostDetailPage = () => {
             margin-top: 10px;
             margin-bottom: 10px;
           }
-
           .comment-form button {
             background-color: #007bff;
             color: white;
@@ -398,11 +364,9 @@ const PostDetailPage = () => {
             border-radius: 5px;
             cursor: pointer;
           }
-
           .comment-form button:hover {
             background-color: #0056b3;
           }
-
           .modal-overlay {
             position: fixed;
             top: 0;
@@ -414,7 +378,6 @@ const PostDetailPage = () => {
             justify-content: center;
             align-items: center;
           }
-
           .modal-content {
             background: white;
             padding: 20px;
@@ -422,11 +385,9 @@ const PostDetailPage = () => {
             text-align: center;
             max-width: 400px;
           }
-
           .modal-buttons {
             margin-top: 20px;
           }
-
           .modal-buttons button {
             margin: 0 10px;
             padding: 10px 20px;
@@ -438,5 +399,4 @@ const PostDetailPage = () => {
       </div>
   );
 };
-
 export default PostDetailPage;

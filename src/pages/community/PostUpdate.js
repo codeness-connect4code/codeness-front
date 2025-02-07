@@ -42,7 +42,7 @@ const PostUpdatePage = () => {
     }
 
     try {
-      await axios.patch(`/posts/${postId}`, {
+      await axios.patch(`/posts/${postId}/update`, {
         title,
         content,
       });
