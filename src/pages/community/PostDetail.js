@@ -204,6 +204,7 @@ const PostDetailPage = () => {
                       src={post.writerProfileUrl
                           || "https://images.unsplash.com/photo-1734613876170-079f67aa0d15?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D"}
                       alt="프로필"
+                      style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0 }}
                       className="profile-img"
                   />
                   <span>{post.writer}</span>
@@ -237,6 +238,7 @@ const PostDetailPage = () => {
                           src={comment.writerProfileUrl
                               || "https://images.unsplash.com/photo-1734613876170-079f67aa0d15?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D"}
                           alt="프로필"
+                          style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0 }}
                           className="profile-img"
                       />
                       <span>{comment.writer}</span>
