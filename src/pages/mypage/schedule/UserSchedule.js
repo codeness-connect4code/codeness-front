@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../api/axios';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import '../../../styles/mypage/schedule/UserSchedule.css'
@@ -27,7 +27,7 @@ const UserSchedule = () => {
       const startDate = currentMonth.startOf('month').format('YYYY-MM-DD');
       const endDate = currentMonth.endOf('month').format('YYYY-MM-DD');
 
-      const response = await axios.get('http://localhost:8080/users/schedule', {
+      const response = await api.get('http://localhost:8080/users/schedule', {
         headers: {
           Authorization: `Bearer ${token}`
         },

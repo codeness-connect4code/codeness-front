@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../api/axios';
 import { jwtDecode } from 'jwt-decode';
 import '../../../styles/mypage/profile/UserUpdate.css'
 
@@ -35,7 +35,7 @@ const UserUpdate = () => {
       const decoded = jwtDecode(token);
       setProvider(decoded.provider);
 
-      const response = await axios.get('http://localhost:8080/users', {
+      const response = await api.get('http://localhost:8080/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -90,7 +90,7 @@ const UserUpdate = () => {
     }
 
     try {
-      const response = await axios.patch('http://localhost:8080/users', formDataToSend, {
+      const response = await api.patch('http://localhost:8080/users', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
