@@ -84,6 +84,10 @@ const MentoringPostForm = () => {
     setShowModal(false);
   };
 
+  const gotoMentoringMain = () => {
+    history.push("/mentoring");
+  };
+
   return (
       <div className="container">
         <h2>멘토 공고 올리기</h2>
@@ -290,7 +294,7 @@ const MentoringPostForm = () => {
             {errors.description && <span className="error-message">{errors.description.message}</span>}
           </div>
 
-          <button type="submit">작성하기</button>
+          <button type="submit" onClick={gotoMentoringMain}>작성하기</button>
         </form>
         <style jsx>{`
           .container {
