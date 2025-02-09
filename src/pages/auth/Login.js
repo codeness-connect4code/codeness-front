@@ -112,78 +112,85 @@ const Login = () => {
           <button onClick={handleGoogleLogin} className="google-login-button">
             Google로 로그인
           </button>
+          <p className="social-login-notice">현재 소셜로그인은 구글 인증 관련으로 허용된 사용자만 가능합니다!</p>
         </div>
 
         {message && <p className="message">{message}</p>}
 
         <style jsx>{`
-        .login-container {
-          max-width: 400px;
-          margin: 0 auto;
-          padding: 20px;
-        }
+       .login-container {
+         max-width: 400px;
+         margin: 0 auto;
+         padding: 20px;
+       }
 
-        .login-form {
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-        }
+       .login-form {
+         display: flex;
+         flex-direction: column;
+         gap: 15px;
+       }
 
-        .form-group {
-          display: flex;
-          flex-direction: column;
-          gap: 5px;
-        }
+       .form-group {
+         display: flex;
+         flex-direction: column;
+         gap: 5px;
+       }
 
-        input {
-          padding: 8px;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-        }
+       input {
+         padding: 8px;
+         border: 1px solid #ddd;
+         border-radius: 4px;
+       }
 
-        .login-button {
-          padding: 10px;
-          background-color: #007bff;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        }
+       .login-button {
+         padding: 10px;
+         background-color: #007bff;
+         color: white;
+         border: none;
+         border-radius: 4px;
+         cursor: pointer;
+       }
 
-        .login-button:hover {
-          background-color: #0056b3;
-        }
+       .login-button:hover {
+         background-color: #0056b3;
+       }
 
-        .social-login {
-          margin-top: 20px;
-          text-align: center;
-        }
+       .social-login {
+         margin-top: 20px;
+         text-align: center;
+       }
 
-        .google-login-button {
-          padding: 10px;
-          background-color: white;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto;
-          color: #4285F4 !important;
-          font-weight: 500;
-          width: 200px;
-        }
+       .google-login-button {
+         padding: 10px;
+         background-color: white;
+         border: 1px solid #ddd;
+         border-radius: 4px;
+         cursor: pointer;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         margin: 0 auto;
+         color: #4285F4 !important;
+         font-weight: 500;
+         width: 200px;
+       }
 
-        .google-login-button:hover {
-          background-color: #f5f5f5;
-        }
+       .google-login-button:hover {
+         background-color: #f5f5f5;
+       }
 
-        .message {
-          margin-top: 15px;
-          color: #dc3545;
-          text-align: center;
-        }
-      `}</style>
+       .social-login-notice {
+         margin-top: 10px;
+         font-size: 13px;
+         color: #666;
+       }
+
+       .message {
+         margin-top: 15px;
+         color: #dc3545;
+         text-align: center;
+       }
+     `}</style>
       </div>
   );
 };
