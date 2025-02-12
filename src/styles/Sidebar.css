@@ -9,7 +9,9 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 250px;
   height: fit-content;
-  margin-right: 20px;
+  /*margin-right: 20px;*/
+  /*position: fixed; top:0; left:0;*/
+  /*position: sticky;*/
 }
 
 /* 제목 스타일 */
@@ -17,7 +19,7 @@
   margin-top: 0;
   font-size: 20px;
   color: #333;
-  border-bottom: 2px solid #007bff;
+  border-bottom: 2px solid #5397e0;
   padding-bottom: 10px;
   margin-bottom: 15px;
 }
@@ -45,7 +47,7 @@
 
 /* 활성화된 필터 스타일 */
 .sidebar ul li.active {
-  background-color: #007bff;
+  background-color: #5397e0;
   color: #fff;
   font-weight: bold;
 }

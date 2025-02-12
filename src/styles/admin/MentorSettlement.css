@@ -1,0 +1,42 @@
+.mentor-settlements-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.settlements-list {
+  width: 100%;
+}
+
+.settlement-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 10px 0;
+}
+
+.mentor-name {
+  font-size: 16px;
+  color: #333;
+}
+
+.detail-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.detail-button:hover {
+  background-color: #0056b3;
+}
+
+.loading-spinner, .error-message {
+  text-align: center;
+  margin-top: 50px;
+  color: #666;
+}

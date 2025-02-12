@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import '../../styles/auth/SignUp.css'
+import api from '../../api/axios';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -82,7 +83,7 @@ const SignUp = () => {
     }
 
     try {
-      await axios.post('http://localhost:8080/signup', formData);
+      await api.post('/signup', formData);
       alert('회원가입이 완료되었습니다.');
       history.push('/login');
     } catch (error) {
@@ -96,10 +97,10 @@ const SignUp = () => {
   };
 
   return (
-      <div>
+      <div className="signup-container">
         <h2>회원가입</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
+        <form onSubmit={handleSubmit} className="signup-form">
+          <div className="signup-form-group">
             <label>이메일:</label>
             <input
                 type="email"
@@ -108,10 +109,10 @@ const SignUp = () => {
                 onChange={handleChange}
                 maxLength={30}
             />
-            {errors.email && <span>{errors.email}</span>}
+            {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
 
-          <div>
+          <div className="signup-form-group">
             <label>비밀번호:</label>
             <input
                 type="password"
@@ -120,10 +121,10 @@ const SignUp = () => {
                 onChange={handleChange}
                 maxLength={30}
             />
-            {errors.password && <span>{errors.password}</span>}
+            {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
 
-          <div>
+          <div className="signup-form-group">
             <label>이름:</label>
             <input
                 type="text"
@@ -132,10 +133,10 @@ const SignUp = () => {
                 onChange={handleChange}
                 maxLength={30}
             />
-            {errors.name && <span>{errors.name}</span>}
+            {errors.name && <span className="error-message">{errors.name}</span>}
           </div>
 
-          <div>
+          <div className="signup-form-group">
             <label>닉네임:</label>
             <input
                 type="text"
@@ -146,7 +147,7 @@ const SignUp = () => {
             />
           </div>
 
-          <div>
+          <div className="signup-form-group">
             <label>전화번호:</label>
             <input
                 type="text"
@@ -157,15 +158,20 @@ const SignUp = () => {
             />
           </div>
 
-          <div>
+          <div className="signup-form-group">
             <label>분야:</label>
             <select name="field" value={formData.field} onChange={handleChange}>
               <option value="FRONTEND">프론트엔드</option>
               <option value="BACKEND">백엔드</option>
+              <option value="GAME">게임</option>
+              <option value="AI">인공지능</option>
+              <option value="SERVER_INFRA">서버-인프라</option>
+              <option value="NETWORK_SECURITY">네트워크-보안</option>
+              <option value="EMBEDDED_SYSTEMS">임베디드</option>
             </select>
           </div>
 
-          <button type="submit">회원가입</button>
+          <button type="submit" className="signup-button">회원가입</button>
         </form>
       </div>
   );

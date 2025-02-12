@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { Link, useHistory } from "react-router-dom";
 import Pagination from "../../components/Pagenation";
 
@@ -23,21 +23,13 @@ const CommunityPage = () => {
     "자유 게시판": "FREE",
     공지사항: "NOTICE",
   };
-  // Axios 기본 설정
-  useEffect(() => {
-    const token = localStorage.getItem("jwtToken");
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
-    axios.defaults.baseURL = "http://localhost:8080";
-  }, []);
 
   // 데이터 요청 함수
   const fetchPosts = async (params = {}) => {
     if (isFetching.current) return; // 요청 중이라면 실행하지 않음
     isFetching.current = true;
     try {
-      const response = await axios.get("/posts", { params });
+      const response = await api.get("/posts", { params });
       setPosts(response.data.data.content || []);
       setTotalPages(response.data.data.totalPages || 1);
       setCurrentPage(params.pageNumber + 1); // 백엔드의 pageNumber(0-based)를 1-based로 변환
@@ -92,6 +84,10 @@ const CommunityPage = () => {
 
   const goToWritePage = () => {
     history.push("/writePost");
+  };
+
+  const goToPostDetail = (postId) => {
+    history.push(`/posts/${postId}`); // postId를 포함하여 상세 페이지로 이동
   };
 
   return (
@@ -157,7 +153,12 @@ const CommunityPage = () => {
               ) : (
                   posts.map((post) => (
                       <tr key={post.id}>
-                        <td>{post.title}</td>
+                        <td
+                            className="clickable-title"
+                            onClick={() => goToPostDetail(post.id)}
+                        >
+                          {post.title}
+                        </td>
                         <td>{post.writer}</td>
                         <td>{post.view}</td>
                         <td>{new Date(post.createdAt).toLocaleDateString()}</td>
@@ -208,7 +209,7 @@ const CommunityPage = () => {
           }
 
           .tab-button.active {
-            background-color: #007bff;
+            background-color: #639cdc;
             color: white;
           }
 
@@ -245,7 +246,7 @@ const CommunityPage = () => {
           .search-button {
             padding: 0;
             margin-left: 8px;
-            background-color: #007bff;
+            background-color: #639cdc;
             color: white;
             border: none;
             border-radius: 10px;
@@ -261,7 +262,7 @@ const CommunityPage = () => {
           .write-button {
             padding: 0;
             margin-left: 10px;
-            background-color: #007bff;
+            background-color: #639cdc;
             color: white;
             border: none;
             border-radius: 10px;
@@ -289,7 +290,29 @@ const CommunityPage = () => {
           .page-button {
             padding: 10px 15px;
             margin: 0 5px;
-            background-color: #007bff !important;
+            background-color: #639cdc !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 10px !important;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+          }
+
+          .clickable-title {
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.3s;
+          }
+
+          .clickable-title:hover {
+            color: #1562b9;
+          }
+
+          .page-button {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #639cdc !important;
             color: white !important;
             border: none !important;
             border-radius: 10px !important;

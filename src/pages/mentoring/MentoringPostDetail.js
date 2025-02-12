@@ -1,17 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom"; // useHistory 추가
-import axios from "axios";
+import React, {useState, useEffect} from "react";
+import {useParams, useHistory} from "react-router-dom"; // useHistory 추가
+import api from "../../api/axios";
 import Pagination from "../../components/Pagenation";
 import "../../styles/mentoring/MentoringPostDetail.css";
+import {DEFAULT_PROFILE_IMAGE} from '../../assets/constants';
 
 const MentoringPostDetail = () => {
-  const { mentoringPostId } = useParams(); // URL 파라미터에서 mentoringPostId 가져오기
+  const {mentoringPostId} = useParams(); // URL 파라미터에서 mentoringPostId 가져오기
   const [mentoringPost, setMentoringPost] = useState(null); // 공고 상세 데이터
   const [reviews, setReviews] = useState([]); // 리뷰 데이터
   const [currentPage, setCurrentPage] = useState(1); // 현재 리뷰 페이지
   const reviewsPerPage = 10; // 페이지당 리뷰 수
   const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
   const history = useHistory(); // 페이지 이동을 위한 useHistory 추가
+
+  const formatDateTime = (dateTime) => {
+    const date = new Date(dateTime);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  };
 
   //경로 변수 받아오기
   // const mentoringPostId = props.match.params.mentoringPostId;
@@ -21,7 +32,7 @@ const MentoringPostDetail = () => {
     const fetchMentoringPostDetail = async () => {
       try {
         console.log(` 멘토링 상세 페이지 : ${mentoringPostId}`);
-        const response = await axios.get(`/mentoring/${mentoringPostId}`);
+        const response = await api.get(`/mentoring/${mentoringPostId}`);
         setMentoringPost(response.data.data);
       } catch (error) {
         console.error("Error fetching mentoring post detail:", error);
@@ -30,7 +41,8 @@ const MentoringPostDetail = () => {
 
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(`/mentoring/${mentoringPostId}/reviews`);
+        const response = await api.get(
+            `/mentoring/${mentoringPostId}/reviews`);
         setReviews(response.data.data.content);
       } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -46,45 +58,69 @@ const MentoringPostDetail = () => {
     history.push(`/mentoring/${mentoringPostId}/mentoring-reservation`);
   };
 
-  if (!mentoringPost) return <div>Loading...</div>;
+  if (!mentoringPost) {
+    return <div>Loading...</div>;
+  }
 
   return (
       <div className="mentoring-page">
         {/* 공고 상세 섹션 */}
         <div className="section mentor-profile">
           <img
-              src={mentoringPost.mentorProfilePicture}
+              src={mentoringPost.mentorProfilePicture
+                  || DEFAULT_PROFILE_IMAGE} //TODO: 나중에 수정
               alt="Mentor Profile"
               className="mentor-image"
           />
           <div className="mentor-details">
-            <h2>{mentoringPost.mentorNickname}</h2>
-            <h1>{mentoringPost.title}</h1>
-            <span className="post-data">{mentoringPost.company}</span>
-            <span className="post-data"><strong>Field:</strong> {mentoringPost.field}</span>
-            <span className="post-data"><strong>Career:</strong> {mentoringPost.career} years</span>
-            <span className="post-data"><strong>Region:</strong> {mentoringPost.region}</span>
-            <span className="post-data"><strong>Price:</strong> {mentoringPost.price} per hour</span>
-            <span className="post-data"><strong>Description:</strong> {mentoringPost.description}</span>
-            <span className="post-data"><strong>Average Rating:</strong>
-              <span className="star-rating">⭐ {mentoringPost.starRating}</span>
+            <h2>[멘토] {mentoringPost.userNickname}</h2>
+            <h1>제목 : {mentoringPost.title}</h1>
+            <span
+                className="post-data"><strong>회사 : </strong>{mentoringPost.company}</span>
+            <span
+                className="post-data"><strong>분야 : </strong> {mentoringPost.field}</span>
+            <span
+                className="post-data"><strong>커리어 : </strong> {mentoringPost.career}년</span>
+            <span
+                className="post-data"><strong>지역 : </strong> {mentoringPost.region}</span>
+            <span
+                className="post-data"><strong>가격 : </strong> {mentoringPost.price}원</span>
+            <span
+                className="post-data"><strong>설명 : </strong> {mentoringPost.description}</span>
+            <span className="post-data"><strong>평균 별점 :</strong>
+              <span className="star-rating">⭐ {mentoringPost.starRating.toFixed(
+                  1)}</span>
             </span>
           </div>
         </div>
 
         {/* 리뷰 섹션 */}
         <div className="section reviews">
-          <h2>Reviews</h2>
+          <h2>리뷰</h2>
           {reviews && reviews.length > 0 ? (
               reviews.map((review) => (
                   <div className="review" key={review.id}>
-                    <p><strong>Rating:</strong> ⭐ {review.starRating}</p>
+                    <p><strong>별점 :</strong>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                          <span
+                              key={star}
+                              style={{
+                                color: star <= review.starRating ? '#FFD700'
+                                    : '#e4e5e9',
+                                fontSize: '24px'
+                              }}
+                          >
+                              ★
+                          </span>
+                      ))}
+                    </p>
                     <p>{review.content}</p>
-                    <p className="review-date">Created: {review.createdAt}</p>
+                    <p className="review-date">리뷰 생성일 : {formatDateTime(
+                        review.createdAt)}</p>
                   </div>
               ))
           ) : (
-              <p>No reviews available.</p>
+              <p>작성된 리뷰가 없습니다.</p>
           )}
 
           {/* 페이지네이션 */}

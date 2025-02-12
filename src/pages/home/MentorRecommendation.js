@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import api from '../../api/axios';
 import MentorBanner from './MentorBanner';
 import './Home.css';
 
@@ -8,10 +9,11 @@ const MentorRecommendation = () => {
   const [isVisible, setIsVisible] = useState(false);
   //토큰 가져오기
   const token = localStorage.getItem("jwtToken");
+  const history = useHistory();
 
   const fetchMentors = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/users/mentoring',{
+      const response = await api.get('/users/mentoring',{
         headers: {
             'Authorization': `Bearer ${token}`
         },
@@ -23,8 +25,13 @@ const MentorRecommendation = () => {
   };
 
   const handleShowMore = () => {
+    //비로그인 추천 필터
+    if(!token){
+      alert("멘토링 추천은 로그인이 필요합니다.");
+      history.push('/login');
+    }
     setIsVisible(true);
-    fetchMentors();
+    fetchMentors();  
   };
 
   return (
@@ -45,9 +52,8 @@ const MentorRecommendation = () => {
           flexDirection: 'column',
           alignItems: 'center'
         }}>
-          {/* TODO: 나중에 김짱구가 아니라 내 이름이어야 함 */}
           <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'white', marginBottom: '24px' }}>
-            김짱구님의 추천 멘토는?
+            나의 추천 멘토는?
           </h2>
           <div style={{ 
             display: 'grid',

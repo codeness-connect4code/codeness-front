@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useHistory } from "react-router-dom";
+import api from "../../api/axios";
 
 const WritePostPage = () => {
   const [title, setTitle] = useState("");
@@ -11,14 +11,6 @@ const WritePostPage = () => {
 
   const history = useHistory();
 
-  useEffect(() => {
-    const token = localStorage.getItem("jwtToken");
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
-    axios.defaults.baseURL = "http://localhost:8080";
-  }, []);
-
   const handleSubmit = async () => {
     if (!title || !content) {
       setModalMessage("제목과 내용을 모두 입력해주세요.");
@@ -27,7 +19,7 @@ const WritePostPage = () => {
     }
 
     try {
-      await axios.post("/posts", {
+      await api.post("/posts", {
         title,
         content,
         postType,
@@ -192,11 +184,13 @@ const WritePostPage = () => {
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
+            flex: 1; /* 기본 flex 값 */
           }
 
           .submit-button {
-            background-color: #007bff;
+            background-color: #639cdc;
             color: white;
+            flex: 5; /* 등록하기 버튼의 너비를 10% 줄임 */
           }
 
           .submit-button:hover {
@@ -206,6 +200,7 @@ const WritePostPage = () => {
           .cancel-button {
             background-color: #6c757d;
             color: white;
+            flex: 1.1; /* 취소하기 버튼의 너비를 10% 늘림 */
           }
 
           .cancel-button:hover {
@@ -238,7 +233,7 @@ const WritePostPage = () => {
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            background-color: #007bff;
+            background-color: #639cdc;
             color: white;
             cursor: pointer;
           }

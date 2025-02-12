@@ -1,19 +1,21 @@
 // 뉴스 메인 페이지-> 메인 페이지에서 보여줄 몇개의 뉴스들
 // MainNewsSection.js
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import api from '../../api/axios';
 import './News.css'
 
 const MainNewsList = () => {
  const [news, setNews] = useState([]);
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState(null);
- const newsUrl = 'http://localhost:8080/news?pageSize=5&pageNumber=0';
+ const history = useHistory();
+ const newsUrl = '/news?pageSize=5&pageNumber=0';
 
  useEffect(() => {
    const fetchNews = async () => {
      try {
-       const response = await axios.get(newsUrl);
+       const response = await api.get(newsUrl);
        setNews(response.data.data.content);
        setLoading(false);
      } catch (err) {
@@ -30,15 +32,15 @@ const MainNewsList = () => {
  return (
    <section
     style={{
-        margin: "5px",
-        display: "inline-block",
-        width: "40%"
+        width: "100%"
     }}
    >
-     <h2>최신 뉴스</h2>
+     <h2
+     style={{ cursor: 'pointer', color: 'black', display: 'inline-block'}}
+     onClick={() => history.push('/news')}>최신 뉴스</h2>
      <div style={{
-        width: "80%",
-        border: "2px solid gray",
+        width: "60%",
+        backgroundColor: '#F8F8F8',
         borderRadius: "10px",
         padding: "10px"
      }}>
@@ -46,7 +48,7 @@ const MainNewsList = () => {
          <div 
          style={{
             padding: "3px",
-            borderBottom: "1px solid gray"
+            textDecoration: 'underline'
          }}
          key={item.id}>
          <a className='news-link'
