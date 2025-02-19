@@ -24,10 +24,10 @@ const MentoringPaymentSuccess = () => {
 
       // 일정 추가 요청 데이터 구성
       const eventData = {
-        summary: `멘토링 - ${mentorNickname}`,
-        description: `${mentorNickname} 멘토님과의 멘토링`,
-        startTime: startDate.toISOString(),
-        endTime: endDate.toISOString(),
+        title: `멘토링 - ${mentorNickname}`,
+        content: `${mentorNickname} 멘토님과의 멘토링`,
+        startDateTime: startDate.toISOString().replace('Z', ''),  // Z 제거
+        endDateTime: endDate.toISOString().replace('Z', ''),      // Z 제거
       };
 
       console.log("📅 캘린더 요청 데이터:", eventData);
@@ -35,7 +35,7 @@ const MentoringPaymentSuccess = () => {
       const response = await api.post("/users/schedule", eventData, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
 
@@ -98,7 +98,7 @@ const MentoringPaymentSuccess = () => {
     try {
       await addToCalendar();
       // await createChatRoom();
-      history.push("/mypage/profile"); // ✅ 모든 작업 완료 후 마이페이지로 이동
+      history.push("/mypage/profile");
     } catch (error) {
       console.error("⚠️ 확인 버튼 처리 중 오류 발생:", error);
     }
